@@ -37,7 +37,7 @@
 	              height: '390',
 	              width: '640',
 	              videoId: songs[0],
-				  playerVars: { autoplay:1/*, controls:TODO ADD BACK IN NO CONTROLS 0*/, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3 },
+				  playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3 },
 	              events: {
 	                'onStateChange': onPlayerStateChange
 	              }});
@@ -50,15 +50,21 @@
 				player.loadVideoById(songs[0], 5, "large");
             }
         }
-		  firebase.on('child_added', function (snapshot) {
-			songs.push(snapshot.name());
-			if(first) {
-				first=false;
-				addFirstYoutubeVideo();
-			} else {
-				$("#queue").append('<div id="'+snapshot.name()+'">Id: '+snapshot.name()+'<br/>Title: '+snapshot.child('name').val()+'<br/>Length: '+snapshot.child('length').val()+'<br/>Thumbnail: '+snapshot.child('thumbnail').val()+'<br/>Num Views: '+snapshot.child('numViews').val()+'</div>');
-			}
-		  });
+			firebase.on('child_added', function(snapshot, prevChildName) {
+			  	songs.push(snapshot.name());
+				if(first) {
+					first=false;
+					addFirstYoutubeVideo();
+				} else {
+					$("#queue").append('<div id="'+snapshot.name()+'">Id: '+snapshot.name()+'<br/>Title: '+snapshot.child('name').val()+'<br/>Length: '+snapshot.child('length').val()+'<br/>Thumbnail: '+snapshot.child('thumbnail').val()+'<br/>Num Views: '+snapshot.child('numViews').val()+'<br/>Priority: '+snapshot.getPriority()+'</div>');
+				}
+			});
+
+			firebase.on('child_moved', function(snapshot, prevChildName) {
+			  var userName = snapshot.name(), userData = snapshot.val();
+			  var where = (prevChildName === null) ? 'at the beginning' : 'after ' + prevChildName;
+			  alert('User ' + userName + ' should now appear ' + where);
+			});
 		</script>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
