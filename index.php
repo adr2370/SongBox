@@ -67,6 +67,8 @@
 						});
 				} else {
 					first=true;
+					$("#youtube").remove();
+					$("#queue").before("<div id='youtube'></div>");
 					player=null;
 				}
             }
