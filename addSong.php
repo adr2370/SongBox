@@ -19,7 +19,7 @@ function patchFirebase($location,$data)
 }
 $song=$_GET['song'];
 try {
-	$youtube=json_decode(file_get_contents("https://gdata.youtube.com/feeds/api/videos?q=".urlencode($song)."&alt=json"));
+	$youtube=json_decode(file_get_contents("https://gdata.youtube.com/feeds/api/videos?q=".urlencode($song)."&alt=json&category=music"));
 	$id=str_replace("http://gdata.youtube.com/feeds/api/videos/","",$youtube->{'feed'}->{'entry'}[0]->{'id'}->{'$t'});
 	$length=$youtube->{'feed'}->{'entry'}[0]->{'media$group'}->{'yt$duration'}->{'seconds'};
 	$name=$youtube->{'feed'}->{'entry'}[0]->{'title'}->{'$t'};

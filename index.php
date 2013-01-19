@@ -23,19 +23,38 @@
 
         <!-- Add your site or application content here -->
 		<script type="text/javascript" src="https://cdn.firebase.com/v0/firebase.js"></script>
+		<script src="http://www.youtube.com/player_api"></script>
 
 		<div id="youtube"></div>
 		<div id="queue"></div>
 		<script type='text/javascript'>
-		  // Get a reference to the root of the chat data.
+		var first=true;
+	      var player;
 		  var firebase = new Firebase('https://adr2370.firebaseio.com/songs');
-
-		  // Add a callback that is triggered for each chat message.
+		var songs=new Array();
+		function addFirstYoutubeVideo() {
+			player=new YT.Player('youtube', {
+	              height: '390',
+	              width: '640',
+	              videoId: songs[0],
+				  playerVars: { autoplay:1/*, controls:TODO ADD BACK IN NO CONTROLS 0*/, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3 },
+	              events: {
+	                'onStateChange': onPlayerStateChange
+	              }});
+			songs.splice(0,1);
+		}
+        function onPlayerStateChange(event) {        
+            if(event.data === 0&&songs.length>0) {
+				$("#"+songs[0]).remove();
+				player.loadVideoById(songs[0], 5, "large");
+				songs.splice(0,1);
+            }
+        }
 		  firebase.on('child_added', function (snapshot) {
-			//snapshot.name() is the url id
-			//snapshot.
-			if($("#youtube").html()=="") {
-				$("#youtube").append('<object width="640" height="360"><param name="movie" value="https://www.youtube.com/v/'+snapshot.name()+'?autoplay=1&controls=0&enablejsapi=1&modestbranding=1&rel=0&showinfo=0&theme=light&version=3"></param><param name="allowFullScreen" value="true"></param><param name="allowScriptAccess" value="always"></param><embed src="https://www.youtube.com/v/'+snapshot.name()+'?autoplay=1&controls=0&enablejsapi=1&modestbranding=1&rel=0&showinfo=0&theme=light&version=3" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="360"></embed></object>');
+			songs.push(snapshot.name());
+			if(first) {
+				first=false;
+				addFirstYoutubeVideo();
 			} else {
 				$("#queue").append('<div id="'+snapshot.name()+'">Id: '+snapshot.name()+'<br/>Title: '+snapshot.child('name').val()+'<br/>Length: '+snapshot.child('length').val()+'<br/>Thumbnail: '+snapshot.child('thumbnail').val()+'<br/>Num Views: '+snapshot.child('numViews').val()+'</div>');
 			}
