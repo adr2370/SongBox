@@ -31,7 +31,7 @@
 	if($counter == 0)
 	{
 		$text = "Text back any of the following commands: 'add' <SONG NAME>, 'info' (get song information),";
-		$textA = "'queue' (see playlist queue), 'help' (list all commands), OR text us how you feel about the song";		
+		$textA = "'queue' (see playlist queue), 'options' (list all commands), OR text us how you feel about the song";		
 		$textB = "ADMIN OPTIONS: 'skip', '+' (to increase volume), '-' (to decrease volume)";
 	
 	
@@ -47,54 +47,65 @@
 	else if(strtolower(substr($body, 0, 3))=="add")
 	{
 		//strip out important stuff from string
-		$song = "Gangnam Style";
-		//if song matches, add to queue
+		$song = substr($body, 4);
+		
 
 		//send song request to backend
 		$text = $song . " has been added to the queue!";	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
 	}
-	/*//get info
-	else if(strtolower(substr($body, 0, 8))=="info")
+	//get info
+	else if(strtolower(substr($body, 0, 4))=="info")
 	{
-		//$text = getCurrentSongInfo();
+		$text = "here is the song info";	
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
 	}
 	//get queue
 	else if(strtolower(substr($body, 0, 6))=="queue")
 	{
-		//$text = getQueue();	
+		$text = "here is the list of songs";	
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
 	}
-	else if(strtolower(substr($body, 0, 6))=="help")
+	else if(strtolower(substr($body, 0, 8))=="options")
 	{
-		$text = "Text back any of the following commands.\n".
-				"'add <SONG NAME>'\n".
-				"'info (to get song information)'\n".
-				"'queue (to see the current playlist queue'\n".
-				"'help' (to get a list of commands)\n".
-				"OR just text us how you feel about the song\n";
+		$text = "Text back any of the following commands: 'add' <SONG NAME>, 'info' (get song information),";
+		$textA = "'queue' (see playlist queue), 'options' (list all commands), OR text us how you feel about the song";		
+		$textB = "ADMIN OPTIONS: 'skip', '+' (to increase volume), '-' (to decrease volume)";
+	
+	
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, $textA);
 		if($isAdmin)
 		{
-			$text = "ADMIN OPTIONS:\n".
-			"'skip'\n".
-			"'+' (to increase volume)\n".
-			"'-' (to decrease volume)\n" . $text;		
-		}		
-	}*/
+			$sms = $client->account->sms_messages->create("949-391-4022",$number, $textB);
+		}
+	}
+	else if(strtolower(substr($body, 0, 6))=="clear")
+	{
+		$counter = 0;
+		$text = "everything was cleared";	
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
+	}
 
 	
-	/*//ADMIN PANEL
+	//ADMIN PANEL
 	//volume control ONLY FOR OWNER OF THE ROOM
-	else if(strtolower(substr($body, 0, 1))=="++" && isAdmin)
-
-	else if(strtolower(substr($body, 0, 1))=="--" && isAdmin)
-
-	else if(strtolower(substr($body, 0, 1))=="skip" && isAdmin)
+	else if(strtolower(substr($body, 0, 2))=="+" && isAdmin)
 	{
-		//skipCurrentSong()
+		$text = "volume increased by 10%";	
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
-		
-
-	else
+	else if(strtolower(substr($body, 0, 2))=="-" && isAdmin)
+	{
+		$text = "volume decreased by 10%";	
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
+	}
+	else if(strtolower(substr($body, 0, 5))=="skip" && isAdmin)
+	{
+		$text = "song was skipped";	
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
+	}
+	/*else
 	{
 		//handle up/downvoting song currently playing
 
@@ -118,8 +129,8 @@
 			$text = "Awesome";					
 		}
 		
-	}
-*/
+	}*/
+
 	//save session for future
 	$_SESSION['counter'] = $counter;
 
