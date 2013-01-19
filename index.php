@@ -41,13 +41,13 @@
 	              events: {
 	                'onStateChange': onPlayerStateChange
 	              }});
-			songs.splice(0,1);
 		}
         function onPlayerStateChange(event) {        
-            if(event.data === 0&&songs.length>0) {
+            if(event.data === 0&&songs.length>1) {
+				firebase.child(songs[0]).remove();
+				songs.splice(0,1);
 				$("#"+songs[0]).remove();
 				player.loadVideoById(songs[0], 5, "large");
-				songs.splice(0,1);
             }
         }
 		  firebase.on('child_added', function (snapshot) {
