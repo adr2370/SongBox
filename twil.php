@@ -13,7 +13,7 @@
 	$number = $_REQUEST['From']; // gets the sender of the message received	
 	$isAdmin = 0; //0 is not admin
 	
-	$counter = 1;
+	$counter = 1;	
 	//confirm user is admin
 	if($number == "+17145857755")
 	{
@@ -49,7 +49,7 @@
 		//strip out important stuff from string
 		$song = substr($body, 4);
 		
-		$responseName = file_get_contents("http://testappshahid.aws.af.cm/addSong.php?song=".urlencode($song)."&number=".$number."&type=".urlencode("music video"));
+		$responseName = file_get_contents("http://testappshahid.aws.af.cm/addSong.php?song=".urlencode($song)."&number=".urlencode($number)."&type=".urlencode("music video"));
 		//send song request to backend
 		$text = $responseName . " has been added to the queue!";	
 
@@ -61,7 +61,7 @@
 		//strip out important stuff from string
 		$song = substr($body, 9);
 		
-		$responseName = file_get_contents("http://testappshahid.aws.af.cm/addSong.php?song=".urlencode($song)."&number=".$number."&type=".urlencode("karaoke"));
+		$responseName = file_get_contents("http://testappshahid.aws.af.cm/addSong.php?song=".urlencode($song)."&number=".urlencode($number)."&type=".urlencode("music video"));
 		//send song request to backend
 		$text = $responseName . " has been added to the queue!";	
 
