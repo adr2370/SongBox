@@ -56,7 +56,7 @@
 
 		}
         function onPlayerStateChange(event) {        
-            if(event.data === 0&&songs.length>1) {
+            if(event.data === 0&&songs.length>0) {
 				player.loadVideoById(songs[0], 5, "large");
 				firebase.child(songs[0]).once('value', function(dataSnapshot) {
 					firebase.parent().child('current').set(dataSnapshot.val());
@@ -85,6 +85,8 @@
 
 			playerdb.on('child_changed', function(snapshot, prevChildName) {
 				player.setVolume(snapshot.val());					
+			});
+			
 			commentDB.on('child_added', function(snapshot, prevChildName) {
 				$("#comments").append(snapshot.val()+"<br/>");
 			});
