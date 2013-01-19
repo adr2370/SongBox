@@ -27,39 +27,89 @@
 
 		<div id="youtube"></div>
 		<div id="queue"></div>
+		<div id="comments"></div>
+		<div id="rating">0</div>
 		<script type='text/javascript'>
 		var first=true;
-	      var player;
-		  var firebase = new Firebase('https://adr2370.firebaseio.com/songs');
+	    var player;
+		var firebase = new Firebase('https://adr2370.firebaseio.com/songs');
+		var playerdb = new Firebase('https://adr2370.firebaseio.com/playerdb');
+		var commentDB = new Firebase('https://adr2370.firebaseio.com/comments');
+		var current = new Firebase('https://adr2370.firebaseio.com/current');
+
 		var songs=new Array();
 		function addFirstYoutubeVideo() {
+			$("#rating").text("0");
+			$("#comments").html("");
+			commentDB.remove();
+			//CREATES YOUTUBE PLAYER
+			//Modify as you see fit, just don't screw with events or videoId
 			player=new YT.Player('youtube', {
 	              height: '390',
 	              width: '640',
 	              videoId: songs[0],
-				  playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3 },
+				  playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50 },
 	              events: {
-	                'onStateChange': onPlayerStateChange
+	                'onStateChange': onPlayerStateChange,
+					'onError': onError
 	              }});
 			firebase.child(songs[0]).once('value', function(dataSnapshot) {
-				 firebase.parent().child('current').set(dataSnapshot.val());
+				current.set(dataSnapshot.val());
+				current.child('rating').set(0);
+				current.child('skip').set(0);
 				$("#"+songs[0]).remove();
 				firebase.child(songs[0]).remove();
 				songs.splice(0,1);
 				});
+
+			playerdb.child('volume').set(50);
+
 		}
-        function onPlayerStateChange(event) {        
-            if(event.data === 0&&songs.length>1) {
+		
+		function nextVideo() {
+			$("#rating").text("0");
+			$("#comments").html("");
+			commentDB.set(null);
+			if(songs.length>0) {
 				player.loadVideoById(songs[0], 5, "large");
 				firebase.child(songs[0]).once('value', function(dataSnapshot) {
-					 firebase.parent().child('current').set(dataSnapshot.val());
+					current.set(dataSnapshot.val());
+					current.child('rating').set(0);
+					current.child('skip').set(0);
 					$("#"+songs[0]).remove();
 					firebase.child(songs[0]).remove();
 					songs.splice(0,1);
 					});
+			} else {
+				first=true;
+				$("#youtube").remove();
+				$("#queue").before("<div id='youtube'></div>");
+				player=null;
+			}
+		}
+		
+        function onPlayerStateChange(event) {        
+            if(event.data == 0) {
+				nextVideo();
             }
         }
+		
+		function onError(event) {
+			nextVideo();
+		}
+
+		current.on('child_changed', function(snapshot, prevChildName) {
+			//CHANGE RATING OR SKIP VIDEO
+			if(snapshot.name()=="rating") {
+				$("#rating").text(snapshot.val());
+			} else if(snapshot.name()=="skip"&&snapshot.val()=="1") {
+				nextVideo();
+			}
+		});
+
 			firebase.on('child_added', function(snapshot, prevChildName) {
+				//ADDS SOMETHING TO QUEUE
+				//snapshot.name() is youtube id, all else is below
 			  	songs.push(snapshot.name());
 				$("#queue").append('<div id="'+snapshot.name()+'">Id: '+snapshot.name()+'<br/>Title: '+snapshot.child('name').val()+'<br/>Length: '+snapshot.child('length').val()+'<br/>Thumbnail: '+snapshot.child('thumbnail').val()+'<br/>Num Views: '+snapshot.child('numViews').val()+'<br/>Priority: '+snapshot.getPriority()+'</div>');
 				if(first) {
@@ -69,11 +119,23 @@
 			});
 
 			firebase.on('child_moved', function(snapshot, prevChildName) {
+				//SWITCHES ORDER OF STUFF IN QUEUE
+				//prevChildName is the name of the previous one, snapshot.name is the id of the snapshot
 				if(prevChildName==null) {
 					$("#queue").prepend($("#"+snapshot.name()).remove());
 				} else {
 					$("#"+prevChildName).after($("#"+snapshot.name()).remove());
 				}
+			});
+
+			playerdb.on('child_changed', function(snapshot, prevChildName) {
+				player.setVolume(snapshot.val());
+			});
+			
+			commentDB.on('child_added', function(snapshot, prevChildName) {
+				//COMMENTS ADDED
+				//snapshot.val() is each comment
+				$("#comments").append(snapshot.val()+"<br/>");
 			});
 		</script>
 

@@ -13,32 +13,35 @@ foreach($data as $key=>$value)
 	$arr[] = $data->$key->{'.priority'};	
 }
 sort($arr);
-print_r($arr);
 
-$firstP = $arr[0];
-$secondP = $arr[1];
+$arrLen = count($arr);
 
-foreach($data as $key=>$value) 
+if($arrLen > 0)
 {
-	$name = $data->$key->name;	
-	$priority = $data->$key->{'.priority'};	
-	if($priority == $firstP)
+	$firstP = $arr[0];
+	foreach($data as $key=>$value) 
 	{
-		echo "1. " .$name."<br>";	
-		break;	
+		$name = $data->$key->name;	
+		$priority = $data->$key->{'.priority'};	
+		if($priority == $firstP)
+		{
+			echo "1. " .$name."<br>";	
+			break;	
+		}
+	}
+	if($arrLen > 1)
+	{
+		$secondP = $arr[1];
+		foreach($data as $key=>$value) 
+		{
+			$name = $data->$key->name;	
+			$priority = $data->$key->{'.priority'};	
+			if($priority == $secondP)
+			{
+				echo "2. " .$name;
+				break;
+			}
+		}
 	}
 }
-
-foreach($data as $key=>$value) 
-{
-	$name = $data->$key->name;	
-	$priority = $data->$key->{'.priority'};	
-	if($priority == $secondP)
-	{
-		echo "2. " .$name;
-		break;
-	}
-}
-
-
 ?>
