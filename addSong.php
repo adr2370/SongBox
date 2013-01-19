@@ -27,6 +27,7 @@ try {
 	$numViews=$youtube->{'feed'}->{'entry'}[0]->{'yt$statistics'}->{'viewCount'};
 	$videoData = array("length" => $length, "name" => $name, "thumbnail" => $thumbnail, "numViews" => $numViews);
 	patchFirebase('songs/'.$id,$videoData);
+	echo $name;
 } catch (Exception $e) {
     echo $e;
 }

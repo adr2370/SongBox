@@ -25,13 +25,20 @@
 		<script type="text/javascript" src="https://cdn.firebase.com/v0/firebase.js"></script>
 
 		<div id="youtube"></div>
+		<div id="queue"></div>
 		<script type='text/javascript'>
 		  // Get a reference to the root of the chat data.
 		  var firebase = new Firebase('https://adr2370.firebaseio.com/songs');
 
 		  // Add a callback that is triggered for each chat message.
 		  firebase.on('child_added', function (snapshot) {
-			$("#youtube").append('<object width="640" height="360"><param name="movie" value="https://www.youtube.com/v/'+snapshot.name()+'?version=3"></param><param name="allowFullScreen" value="true"></param><param name="allowScriptAccess" value="always"></param><embed src="https://www.youtube.com/v/'+snapshot.name()+'?version=3" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="360"></embed></object>');
+			//snapshot.name() is the url id
+			//snapshot.
+			if($("#youtube").html()=="") {
+				$("#youtube").append('<object width="640" height="360"><param name="movie" value="https://www.youtube.com/v/'+snapshot.name()+'?autoplay=1&controls=0&enablejsapi=1&modestbranding=1&rel=0&showinfo=0&theme=light&version=3"></param><param name="allowFullScreen" value="true"></param><param name="allowScriptAccess" value="always"></param><embed src="https://www.youtube.com/v/'+snapshot.name()+'?autoplay=1&controls=0&enablejsapi=1&modestbranding=1&rel=0&showinfo=0&theme=light&version=3" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="360"></embed></object>');
+			} else {
+				$("#queue").append('<div id="'+snapshot.name()+'">Id: '+snapshot.name()+'<br/>Title: '+snapshot.child('name').val()+'<br/>Length: '+snapshot.child('length').val()+'<br/>Thumbnail: '+snapshot.child('thumbnail').val()+'<br/>Num Views: '+snapshot.child('numViews').val()+'</div>');
+			}
 		  });
 		</script>
 
