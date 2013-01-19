@@ -108,6 +108,13 @@
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
 
+	else if(strtolower(substr($body, 0, 4))=="skip" && isAdmin)
+	{		
+		$text = "the current song was skipped";	
+		file_get_contents("http://testappshahid.aws.af.cm/skipSong.php");	
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
+	}
+
 	
 	//ADMIN PANEL
 	//volume control ONLY FOR OWNER OF THE ROOM
