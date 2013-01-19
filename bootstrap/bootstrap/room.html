@@ -6,78 +6,217 @@
 <meta name="description" content="Creating a table with Twitter Bootstrap. Learn how to use Twitter Bootstrap toolkit to create Tables with examples.">  
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="css/docs.css" rel="stylesheet">
+
     <link href="css/G.css" rel="stylesheet"> 
     <style type="text/css">
 body {
   text-align: center;
   font-style: oblique;
   font-family: fantasy;
-
   padding-bottom: 25px;
   background-image:url('img/abcde.jpg');
-  /*background-color:#536895;*/
-  /*style="background-image:url('file:///C:/Users/Ray/Downloads/eTmKJ.jpg');*/
   background-repeat:repeat;
   -webkit-border-radius: 6px;  
   -moz-border-radius: 6px;  
   border-radius: 6px;   
-
 }
 h2 {
  color:#536895;
 }
-
 </style>
+<script src="js/vendor/modernizr-2.6.2.min.js"></script>
 </head>  
+
 <body>  
-
-
 <div class="container" style="background-color:#000000;width:100%;min-height:60px;font-size:55px;padding-top:30px;color:#FFFFFF;">
-  Text "Options" to (949)-391-4022 to start.
+Text "Options" to (949)-391-4022 to start.
 </div>
 
 <br>
-
-
     <div class="container" style="padding-left:45px;padding-right:45px;">
-    <div class="progress" style="text-align:center;">
-    <div class="bar bar-success" style="width: 35%;background-color:#666666;"></div>
-    <div class="bar bar-warning" style="width: 20%;background-color:#666666;"></div>
-    <div class="bar bar-danger" style="width: 10%;background-color:#666666;"></div>
+     <div class="progress" style="text-align:center;">
+      <div class="bar bar-success" style="width: 35%;background-color:#666666;"></div>
+      <div class="bar bar-warning" style="width: 20%;background-color:#666666;"></div>
+       <div class="bar bar-danger" style="width: 10%;background-color:#666666;"></div>
+     </div>
     </div>
-  </div>
 
     <div class="row-fluid">
-    <div class="span6" style="background-color:#666666;">
+     <div class="span6" style="background-color:#666666;">
       <br>
-<iframe width="560" height="315" src="http://www.youtube.com/embed/kffacxfA7G4" frameborder="0" allowfullscreen></iframe>
+      <div id="youtube"></div>
       <br>
 
+     <blockquote>
+     <small>Someone famous <cite title="Source Title">Source Title</cite></small>
+     <small>Someone famous <cite title="Source Title">Source Title</cite></small>
+     <small>Someone famous <cite title="Source Title">Source Title</cite></small>
+     <small>Someone famous <cite title="Source Title">Source dfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdgdgdfgTitle</cite></small>
+     <small>Someone famous <cite title="Source Title">Source Title</cite></small>
+     <small>Someone famous <cite title="Source Title">Source Title</cite></small>
+     <small>Someone famous <cite title="Source Title">Source Title</cite></small>
+     <small>Someone famous <cite title="Source Title">Source Title</cite></small>
+     <small>Someone famous <cite title="Source Title">Source Title</cite></small>
+     <small>Someone famous <cite title="Source Title">Source Title</cite></small>
+     <small>Someone famous <cite title="Source Title">Source Title</cite></small>
+     <small>Someone famous <cite title="Source Title">Source Title</cite></small>
+     <small>Someone famous <cite title="Source Title">Source Title</cite></small>
+     </blockquote>
+     </div>
+  
+     <div class="span6" style="background-color:#333333;color:#888888;">
+      <table class="table">
+        <tr>
+<td>Id</td>
+<td>Title</td>
+<td>Length</td>
+<td>Thumbnail</td>
+<td>Views</td>
+<td>Priority</td>
+</tr>
+<div id="queue"></div> 
+</table>      
 
-    <blockquote>
-    <small>Someone famous <cite title="Source Title">Source Title</cite></small>
-    <small>Someone famous <cite title="Source Title">Source Title</cite></small>
-    <small>Someone famous <cite title="Source Title">Source Title</cite></small>
-    <small>Someone famous <cite title="Source Title">Source dfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdgdgdfgTitle</cite></small>
-    <small>Someone famous <cite title="Source Title">Source Title</cite></small>
-    <small>Someone famous <cite title="Source Title">Source Title</cite></small>
-    <small>Someone famous <cite title="Source Title">Source Title</cite></small>
-    <small>Someone famous <cite title="Source Title">Source Title</cite></small>
-    <small>Someone famous <cite title="Source Title">Source Title</cite></small>
-    <small>Someone famous <cite title="Source Title">Source Title</cite></small>
-    <small>Someone famous <cite title="Source Title">Source Title</cite></small>
-    <small>Someone famous <cite title="Source Title">Source Title</cite></small>
-    <small>Someone famous <cite title="Source Title">Source Title</cite></small>
+        
 
 
-
-
-    </blockquote>
-
+     </div>
     </div>
-    <div class="span6" style="background-color:#333333;color:#888888;">ABCD</div>
-    </div>
+
+<!--Copied Code-->
+
+  <script type="text/javascript" src="https://cdn.firebase.com/v0/firebase.js"></script>
+    <script src="http://www.youtube.com/player_api"></script>
+
+
+
+    <div id="comments"></div>
+    <div id="rating">0</div>
+    <script type='text/javascript'>
+    var first=true;
+      var player;
+    var firebase = new Firebase('https://adr2370.firebaseio.com/songs');
+    var playerdb = new Firebase('https://adr2370.firebaseio.com/playerdb');
+    var commentDB = new Firebase('https://adr2370.firebaseio.com/comments');
+    var current = new Firebase('https://adr2370.firebaseio.com/current');
+
+    var songs=new Array();
+    function addFirstYoutubeVideo() {
+      $("#rating").text("0");
+      $("#comments").html("");
+      commentDB.remove();
+      //CREATES YOUTUBE PLAYER
+      //Modify as you see fit, just don't screw with events or videoId
+      player=new YT.Player('youtube', {
+                height: '390',
+                width: '640',
+                videoId: songs[0],
+          playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50 },
+                events: {
+                  'onStateChange': onPlayerStateChange,
+          'onError': onError
+                }});
+      firebase.child(songs[0]).once('value', function(dataSnapshot) {
+        current.set(dataSnapshot.val());
+        current.child('rating').set(0);
+        current.child('skip').set(0);
+        $("#"+songs[0]).remove();
+        firebase.child(songs[0]).remove();
+        songs.splice(0,1);
+        });
+
+      playerdb.child('volume').set(50);
+
+    }
+    
+    function nextVideo() {
+      $("#rating").text("0");
+      $("#comments").html("");
+      commentDB.set(null);
+      if(songs.length>0) {
+        player.loadVideoById(songs[0], 5, "large");
+        firebase.child(songs[0]).once('value', function(dataSnapshot) {
+          current.set(dataSnapshot.val());
+          current.child('rating').set(0);
+          current.child('skip').set(0);
+          $("#"+songs[0]).remove();
+          firebase.child(songs[0]).remove();
+          songs.splice(0,1);
+          });
+      } else {
+        first=true;
+        $("#youtube").remove();
+        $("#queue").before("<div id='youtube'></div>");
+        player=null;
+      }
+    }
+    
+        function onPlayerStateChange(event) {        
+            if(event.data == 0) {
+        nextVideo();
+            }
+        }
+    
+    function onError(event) {
+      nextVideo();
+    }
+
+    current.on('child_changed', function(snapshot, prevChildName) {
+      //CHANGE RATING OR SKIP VIDEO
+      if(snapshot.name()=="rating") {
+        $("#rating").text(snapshot.val());
+      } else if(snapshot.name()=="skip"&&snapshot.val()=="1") {
+        nextVideo();
+      }
+    });
+
+      firebase.on('child_added', function(snapshot, prevChildName) {
+        //ADDS SOMETHING TO QUEUE
+        //snapshot.name() is youtube id, all else is below
+          songs.push(snapshot.name());
+          $("#queue").append('<div id="'+snapshot.name()+'"><tr><td>'+snapshot.name()+'</td><td>'+snapshot.child('name').val()+'</td><td>'+snapshot.child('length').val()+'</td><td>'+snapshot.child('thumbnail').val()+'</td><td>'+snapshot.child('numViews').val()+'</td><td>'+snapshot.getPriority()+'</div>');
+       // $("#queue").append('<div id="'+snapshot.name()+'">Id: '+snapshot.name()+'<br/>Title: '+snapshot.child('name').val()+'<br/>Length: '+snapshot.child('length').val()+'<br/>Thumbnail: '+snapshot.child('thumbnail').val()+'<br/>Num Views: '+snapshot.child('numViews').val()+'<br/>Priority: '+snapshot.getPriority()+'</div>');
+        if(first) {
+          first=false;
+          addFirstYoutubeVideo();
+        }
+      });
+
+      firebase.on('child_moved', function(snapshot, prevChildName) {
+        //SWITCHES ORDER OF STUFF IN QUEUE
+        //prevChildName is the name of the previous one, snapshot.name is the id of the snapshot
+        if(prevChildName==null) {
+          $("#queue").prepend($("#"+snapshot.name()).remove());
+        } else {
+          $("#"+prevChildName).after($("#"+snapshot.name()).remove());
+        }
+      });
+
+      playerdb.on('child_changed', function(snapshot, prevChildName) {
+        player.setVolume(snapshot.val());
+      });
+      
+      commentDB.on('child_added', function(snapshot, prevChildName) {
+        //COMMENTS ADDED
+        //snapshot.val() is each comment
+        $("#comments").append(snapshot.val()+"<br/>");
+      });
+    </script>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+
+<!-- End of Copied code -->
 
 <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
     <script src="assets/js/jquery.js"></script>
