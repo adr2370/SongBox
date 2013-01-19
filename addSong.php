@@ -1,8 +1,10 @@
 <?php
 $song=$_GET['song'];
-echo $song;
 try {
-	$data = array($song => "1");
+$youtube=json_decode(file_get_contents("https://gdata.youtube.com/feeds/api/videos?q=".$song."&alt=json"));
+$youtubeid=$youtube->{'feed'}->{'entry'}[0]->{'id'}->{'$t'};
+echo $youtubeid;
+	$data = array($youtubeid => "1");
 	$chlead = curl_init();
 	curl_setopt($chlead, CURLOPT_URL, 'https://adr2370.firebaseio.com/songs/.json');
 	curl_setopt($chlead, CURLOPT_USERAGENT, 'SugarConnector/1.4');
@@ -19,7 +21,6 @@ try {
 	$chleadapierr = curl_errno($chlead);
 	$chleaderrmsg = curl_error($chlead);
 	curl_close($chlead);
-echo $response;
 } catch (Exception $e) {
     echo $e;
 }
