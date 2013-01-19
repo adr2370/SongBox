@@ -11,14 +11,14 @@
 	$counter = $_SESSION['counter']; // sets up a session / conversation (Twilio saves info for 4 hours...ish)
 	$body = $_REQUEST['Body']; // gets the body of the message received
 	$number = $_REQUEST['From']; // gets the sender of the message received	
-	$isAdmin = 0; //0 is not admin
+	$isAdmin = false; //0 is not admin
 	
 	$counter = 1;	
 	//confirm user is admin
-	$number = substr($number, 1);
-	if($number == "17145857755")
+	$number = substr($number, 1);	
+	if($number == "17145857755" || $number == "6572060254")
 	{
-		$isAdmin = 1;		
+		$isAdmin = true;			
 	}
 	
 	
@@ -60,7 +60,7 @@
 	else if(strtolower(substr($body, 0, 7))=="karaoke")
 	{
 		//strip out important stuff from string
-		$song = substr($body, 9);
+		$song = substr($body, 8);
 		
 		$responseName = file_get_contents("http://testappshahid.aws.af.cm/addSong.php?song=".urlencode($song)."&number=".urlencode($number)."&type=".urlencode("music video"));
 		//send song request to backend
@@ -108,7 +108,7 @@
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
 
-	else if(strtolower(substr($body, 0, 4))=="skip" && isAdmin)
+	else if(strtolower(substr($body, 0, 4))=="skip" && $isAdmin)
 	{		
 		$text = "the current song was skipped";	
 		file_get_contents("http://testappshahid.aws.af.cm/skipSong.php");	
@@ -118,20 +118,21 @@
 	
 	//ADMIN PANEL
 	//volume control ONLY FOR OWNER OF THE ROOM
-	else if(strtolower(substr($body, 0, 1))=="+" && isAdmin)
+	else if(strtolower(substr($body, 0, 1))=="+" && $isAdmin)
 	{
-		$text = "volume increased by 10%";
-		file_get_contents("http://testappshahid.aws.af.cm/increaseVolume.php?val=20");	
+		$text = "volume was increased";
+		file_get_contents("http://testappshahid.aws.af.cm/increaseVolume.php?val=20");			
+
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
-	else if(strtolower(substr($body, 0, 1))=="-" && isAdmin)
+	else if(strtolower(substr($body, 0, 1))=="-" && $isAdmin)
 	{
-		$text = "volume decreased by 10%";	
+		$text = "volume was decreased";	
 		file_get_contents("http://testappshahid.aws.af.cm/increaseVolume.php?val=-20");	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
 
-	else if(strtolower(substr($body, 0, 4))=="skip" && isAdmin)
+	else if(strtolower(substr($body, 0, 4))=="skip" && $isAdmin)
 	{
 		$text = "song was skipped";	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
