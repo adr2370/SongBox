@@ -58,7 +58,7 @@
 	//get info
 	else if(strtolower(substr($body, 0, 4))=="info")
 	{
-		$text = "here is the song info";	
+		$text = file_get_contents("http://testappshahid.aws.af.cm/getInfo.php");	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
 	}
 	//get queue
