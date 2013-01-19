@@ -16,7 +16,7 @@
 	$counter = 1;	
 	//confirm user is admin
 	$number = substr($number, 1);	
-	if($number == "17145857755" || $number == "6572060254")
+	if($number == "17145857755" || $number == "16572060254")
 	{
 		$isAdmin = true;			
 	}
