@@ -7,8 +7,12 @@
 	<body>
 		
 		<div id="loading">Loading . . .</div>
-		<canvas id="fft" height="300" width="500"></canvas>
+		<!-- <canvas id="canv" height="300" width="500"></canvas> use this canvas if not 3d-->
 	
+		<script src="../lib/Three.debug.js"></script>
+		<script src="../lib/Stats.js"></script>
+		<script src="../lib/Detector.js"></script>
+
 		<script src="../../src/dancer.js"></script>
 		<script src="../../src/support.js"></script>
 		<script src="../../src/kick.js"></script>
@@ -17,9 +21,15 @@
 		<script src="../../src/adapterFlash.js"></script>
 		<script src="../../lib/fft.js"></script>
 		<script src="../../lib/flash_detect.js"></script>
-		<script src="../../plugins/dancer.fft.js"></script>
-
-		<!-- Demo stuff -->
-		<script src="js/player2.js"></script>
+	<!-- 	<script src="../../plugins/dancer.fft.js"></script> //include if using fft or both
+		<script src="../../plugins/dancer.waveform.js"></script>//include if using waveform or both
+	 -->	<!-- Demo stuff -->
+	 <!-- include scene and player if 3d blasting -->
+		<script src="js/scene.js"></script> 
+		<script src="js/player.js"></script>
+		
+		
+		
+		<!-- <script src="js/waveform.js"></script>  //include if using waveform, include player2 if using fft. should probably name better. wtvs.-->
 	</body>
 </html>
