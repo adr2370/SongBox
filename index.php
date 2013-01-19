@@ -28,12 +28,14 @@
 		<div id="youtube"></div>
 		<div id="queue"></div>
 		<div id="comments"></div>
+		<div id="rating">0</div>
 		<script type='text/javascript'>
 		var first=true;
 	    var player;
 		var firebase = new Firebase('https://adr2370.firebaseio.com/songs');
 		var playerdb = new Firebase('https://adr2370.firebaseio.com/playerdb');
 		var commentDB = new Firebase('https://adr2370.firebaseio.com/comments');
+		var current = new Firebase('https://adr2370.firebaseio.com/current');
 
 		var songs=new Array();
 		function addFirstYoutubeVideo() {
@@ -46,7 +48,9 @@
 	                'onStateChange': onPlayerStateChange
 	              }});
 			firebase.child(songs[0]).once('value', function(dataSnapshot) {
-				 firebase.parent().child('current').set(dataSnapshot.val());
+				 firebase.parent().child('current').set(dataSnapshot.val());	
+					firebase.parent().child('current').child('rating').set(0);
+					firebase.parent().child('current').child('skip').set(0);
 				$("#"+songs[0]).remove();
 				firebase.child(songs[0]).remove();
 				songs.splice(0,1);
@@ -55,24 +59,41 @@
 			playerdb.child('volume').set(50);
 
 		}
+		
+		function nextVideo() {
+			$("#rating").text("0");
+			if(songs.length>0) {
+				player.loadVideoById(songs[0], 5, "large");
+				firebase.child(songs[0]).once('value', function(dataSnapshot) {
+					firebase.parent().child('current').set(dataSnapshot.val());
+					firebase.parent().child('current').child('rating').set(0);
+					firebase.parent().child('current').child('skip').set(0);
+					$("#"+songs[0]).remove();
+					firebase.child(songs[0]).remove();
+					songs.splice(0,1);
+					});
+			} else {
+				first=true;
+				$("#youtube").remove();
+				$("#queue").before("<div id='youtube'></div>");
+				player=null;
+			}
+		}
+		
         function onPlayerStateChange(event) {        
-            if(event.data === 0) {
-				if(songs.length>0) {
-					player.loadVideoById(songs[0], 5, "large");
-					firebase.child(songs[0]).once('value', function(dataSnapshot) {
-						firebase.parent().child('current').set(dataSnapshot.val());
-						$("#"+songs[0]).remove();
-						firebase.child(songs[0]).remove();
-						songs.splice(0,1);
-						});
-				} else {
-					first=true;
-					$("#youtube").remove();
-					$("#queue").before("<div id='youtube'></div>");
-					player=null;
-				}
+            if(event.data == 0) {
+				nextVideo();
             }
         }
+
+		current.on('child_changed', function(snapshot, prevChildName) {
+			if(snapshot.name()=="rating") {
+				$("#rating").text(snapshot.val());
+			} else if(snapshot.name()=="skip"&&snapshot.val()=="1") {
+				nextVideo();
+			}
+		});
+
 			firebase.on('child_added', function(snapshot, prevChildName) {
 			  	songs.push(snapshot.name());
 				$("#queue").append('<div id="'+snapshot.name()+'">Id: '+snapshot.name()+'<br/>Title: '+snapshot.child('name').val()+'<br/>Length: '+snapshot.child('length').val()+'<br/>Thumbnail: '+snapshot.child('thumbnail').val()+'<br/>Num Views: '+snapshot.child('numViews').val()+'<br/>Priority: '+snapshot.getPriority()+'</div>');
