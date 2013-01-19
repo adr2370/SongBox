@@ -39,6 +39,8 @@ try {
 		if(file_get_contents("https://adr2370.firebaseio.com/songs/".$id."/".$number."/.json")=="null") {
 			$currPriority=intval(file_get_contents("https://adr2370.firebaseio.com/songs/".$id."/.priority/.json"));
 			$priority=$currPriority-5;
+			$numberData = array($number => 1);
+			patchFirebase('songs/'.$id,$numberData,"PATCH");
 			patchFirebase('songs/'.$id.'/.priority',$priority,"PUT");
 		}
 	}
