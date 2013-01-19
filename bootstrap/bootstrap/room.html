@@ -66,7 +66,8 @@ Text "Options" to (949)-391-4022 to start.
   
      <div class="span6" style="background-color:#333333;color:#888888;">
       <table class="table">
-        <tr>
+	<tbody id="queue">
+        <tr id="topQueue">
 <td>Id</td>
 <td>Title</td>
 <td>Length</td>
@@ -74,7 +75,7 @@ Text "Options" to (949)-391-4022 to start.
 <td>Views</td>
 <td>Priority</td>
 </tr>
-<div id="queue"></div> 
+</tbody>
 </table>      
 
         
@@ -174,7 +175,7 @@ Text "Options" to (949)-391-4022 to start.
         //ADDS SOMETHING TO QUEUE
         //snapshot.name() is youtube id, all else is below
           songs.push(snapshot.name());
-          $("#queue").append('<div id="'+snapshot.name()+'"><tr><td>'+snapshot.name()+'</td><td>'+snapshot.child('name').val()+'</td><td>'+snapshot.child('length').val()+'</td><td>'+snapshot.child('thumbnail').val()+'</td><td>'+snapshot.child('numViews').val()+'</td><td>'+snapshot.getPriority()+'</div>');
+          $("#queue").append('<tr id="'+snapshot.name()+'"><td>'+snapshot.name()+'</td><td>'+snapshot.child('name').val()+'</td><td>'+snapshot.child('length').val()+'</td><td>'+snapshot.child('thumbnail').val()+'</td><td>'+snapshot.child('numViews').val()+'</td><td>'+snapshot.getPriority()+'</tr>');
        // $("#queue").append('<div id="'+snapshot.name()+'">Id: '+snapshot.name()+'<br/>Title: '+snapshot.child('name').val()+'<br/>Length: '+snapshot.child('length').val()+'<br/>Thumbnail: '+snapshot.child('thumbnail').val()+'<br/>Num Views: '+snapshot.child('numViews').val()+'<br/>Priority: '+snapshot.getPriority()+'</div>');
         if(first) {
           first=false;
@@ -186,7 +187,7 @@ Text "Options" to (949)-391-4022 to start.
         //SWITCHES ORDER OF STUFF IN QUEUE
         //prevChildName is the name of the previous one, snapshot.name is the id of the snapshot
         if(prevChildName==null) {
-          $("#queue").prepend($("#"+snapshot.name()).remove());
+          $("#topQueue").after($("#"+snapshot.name()).remove());
         } else {
           $("#"+prevChildName).after($("#"+snapshot.name()).remove());
         }
@@ -219,26 +220,5 @@ Text "Options" to (949)-391-4022 to start.
 <!-- End of Copied code -->
 
 <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    <script src="assets/js/jquery.js"></script>
-    <script src="assets/js/bootstrap-transition.js"></script>
-    <script src="assets/js/bootstrap-alert.js"></script>
-    <script src="assets/js/bootstrap-modal.js"></script>
-    <script src="assets/js/bootstrap-dropdown.js"></script>
-    <script src="assets/js/bootstrap-scrollspy.js"></script>
-    <script src="assets/js/bootstrap-tab.js"></script>
-    <script src="assets/js/bootstrap-tooltip.js"></script>
-    <script src="assets/js/bootstrap-popover.js"></script>
-    <script src="assets/js/bootstrap-button.js"></script>
-    <script src="assets/js/bootstrap-collapse.js"></script>
-    <script src="assets/js/bootstrap-carousel.js"></script>
-    <script src="assets/js/bootstrap-typeahead.js"></script>
-    <script src="assets/js/bootstrap-affix.js"></script>
-
-    <script src="assets/js/holder/holder.js"></script>
-    <script src="assets/js/google-code-prettify/prettify.js"></script>
-
-    <script src="assets/js/application.js"></script>
-
-
 </body>  
 </html>  
