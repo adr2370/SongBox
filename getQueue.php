@@ -13,9 +13,9 @@ foreach($data as $key=>$value)
 	$arr[] = $data->$key->{'.priority'};	
 }
 sort($arr);
-print_r($arr);
 
 $arrLen = count($arr);
+
 if($arrLen > 0)
 {
 	$firstP = $arr[0];
