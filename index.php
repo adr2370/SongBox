@@ -39,6 +39,11 @@
 
 		var songs=new Array();
 		function addFirstYoutubeVideo() {
+			$("#rating").text("0");
+			$("#comments").html("");
+			commentDB.remove();
+			//CREATES YOUTUBE PLAYER
+			//Modify as you see fit, just don't screw with events or videoId
 			player=new YT.Player('youtube', {
 	              height: '390',
 	              width: '640',
@@ -49,9 +54,9 @@
 					'onError': onError
 	              }});
 			firebase.child(songs[0]).once('value', function(dataSnapshot) {
-				 firebase.parent().child('current').set(dataSnapshot.val());	
-					firebase.parent().child('current').child('rating').set(0);
-					firebase.parent().child('current').child('skip').set(0);
+				current.set(dataSnapshot.val());
+				current.child('rating').set(0);
+				current.child('skip').set(0);
 				$("#"+songs[0]).remove();
 				firebase.child(songs[0]).remove();
 				songs.splice(0,1);
@@ -63,12 +68,14 @@
 		
 		function nextVideo() {
 			$("#rating").text("0");
-			if(songs.length>0) {
+			$("#comments").html("");
+			commentDB.remove();
+			if(songs.length>1) {
 				player.loadVideoById(songs[0], 5, "large");
 				firebase.child(songs[0]).once('value', function(dataSnapshot) {
-					firebase.parent().child('current').set(dataSnapshot.val());
-					firebase.parent().child('current').child('rating').set(0);
-					firebase.parent().child('current').child('skip').set(0);
+					current.set(dataSnapshot.val());
+					current.child('rating').set(0);
+					current.child('skip').set(0);
 					$("#"+songs[0]).remove();
 					firebase.child(songs[0]).remove();
 					songs.splice(0,1);
@@ -92,6 +99,7 @@
 		}
 
 		current.on('child_changed', function(snapshot, prevChildName) {
+			//CHANGE RATING OR SKIP VIDEO
 			if(snapshot.name()=="rating") {
 				$("#rating").text(snapshot.val());
 			} else if(snapshot.name()=="skip"&&snapshot.val()=="1") {
@@ -100,6 +108,8 @@
 		});
 
 			firebase.on('child_added', function(snapshot, prevChildName) {
+				//ADDS SOMETHING TO QUEUE
+				//snapshot.name() is youtube id, all else is below
 			  	songs.push(snapshot.name());
 				$("#queue").append('<div id="'+snapshot.name()+'">Id: '+snapshot.name()+'<br/>Title: '+snapshot.child('name').val()+'<br/>Length: '+snapshot.child('length').val()+'<br/>Thumbnail: '+snapshot.child('thumbnail').val()+'<br/>Num Views: '+snapshot.child('numViews').val()+'<br/>Priority: '+snapshot.getPriority()+'</div>');
 				if(first) {
@@ -109,6 +119,8 @@
 			});
 
 			firebase.on('child_moved', function(snapshot, prevChildName) {
+				//SWITCHES ORDER OF STUFF IN QUEUE
+				//prevChildName is the name of the previous one, snapshot.name is the id of the snapshot
 				if(prevChildName==null) {
 					$("#queue").prepend($("#"+snapshot.name()).remove());
 				} else {
@@ -117,10 +129,12 @@
 			});
 
 			playerdb.on('child_changed', function(snapshot, prevChildName) {
-				player.setVolume(snapshot.val());					
+				player.setVolume(snapshot.val());
 			});
 			
 			commentDB.on('child_added', function(snapshot, prevChildName) {
+				//COMMENTS ADDED
+				//snapshot.val() is each comment
 				$("#comments").append(snapshot.val()+"<br/>");
 			});
 		</script>
