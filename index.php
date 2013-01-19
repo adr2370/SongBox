@@ -69,7 +69,7 @@
 		function nextVideo() {
 			$("#rating").text("0");
 			$("#comments").html("");
-			commentDB.set(null);
+			commentDB.remove();
 			if(songs.length>0) {
 				player.loadVideoById(songs[0], 5, "large");
 				firebase.child(songs[0]).once('value', function(dataSnapshot) {
