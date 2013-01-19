@@ -31,12 +31,7 @@
 
 		  // Add a callback that is triggered for each chat message.
 		  firebase.on('child_added', function (snapshot) {
-			$("#youtube").append('<object width="640" height="360">
-			  <param name="movie" value="https://www.youtube.com/v/'+snapshot.name();+'?version=3"></param>
-			  <param name="allowFullScreen" value="true"></param>
-			  <param name="allowScriptAccess" value="always"></param>
-			  <embed src="https://www.youtube.com/v/Zhawgd0REhA?version=3" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="360"></embed>
-			</object>');
+			$("#youtube").append('<object width="640" height="360"><param name="movie" value="https://www.youtube.com/v/'+snapshot.name()+'?version=3"></param><param name="allowFullScreen" value="true"></param><param name="allowScriptAccess" value="always"></param><embed src="https://www.youtube.com/v/'+snapshot.name()+'?version=3" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="360"></embed></object>');
 		  });
 		</script>
 

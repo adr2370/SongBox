@@ -1,17 +1,12 @@
 <?php
-$song=$_GET['song'];
-try {
-$youtube=json_decode(file_get_contents("https://gdata.youtube.com/feeds/api/videos?q=".$song."&alt=json"));
-$youtubeid=$youtube->{'feed'}->{'entry'}[0]->{'id'}->{'$t'};
-echo $youtubeid;
-	$data = array($youtubeid => "1");
+function patchFirebase($location,$data)
+{
 	$chlead = curl_init();
-	curl_setopt($chlead, CURLOPT_URL, 'https://adr2370.firebaseio.com/songs/.json');
+	curl_setopt($chlead, CURLOPT_URL, 'https://adr2370.firebaseio.com/'.$location.'/.json');
 	curl_setopt($chlead, CURLOPT_USERAGENT, 'SugarConnector/1.4');
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
-	    'Content-Type: application/json',                                                                                
-	    'Content-Length: ' . strlen($data_string))                                                                       
-	);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+	    'Content-Type: application/json'
+	));
 	curl_setopt($chlead, CURLOPT_VERBOSE, 1);
 	curl_setopt($chlead, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($chlead, CURLOPT_CUSTOMREQUEST, "PATCH"); 
@@ -21,6 +16,17 @@ echo $youtubeid;
 	$chleadapierr = curl_errno($chlead);
 	$chleaderrmsg = curl_error($chlead);
 	curl_close($chlead);
+}
+$song=$_GET['song'];
+try {
+	$youtube=json_decode(file_get_contents("https://gdata.youtube.com/feeds/api/videos?q=".urlencode($song)."&alt=json"));
+	$id=str_replace("http://gdata.youtube.com/feeds/api/videos/","",$youtube->{'feed'}->{'entry'}[0]->{'id'}->{'$t'});
+	$length=$youtube->{'feed'}->{'entry'}[0]->{'media$group'}->{'yt$duration'}->{'seconds'};
+	$name=$youtube->{'feed'}->{'entry'}[0]->{'title'}->{'$t'};
+	$thumbnail=$youtube->{'feed'}->{'entry'}[0]->{'media$group'}->{'media$thumbnail'}[0]->{'url'};
+	$numViews=$youtube->{'feed'}->{'entry'}[0]->{'yt$statistics'}->{'viewCount'};
+	$videoData = array("length" => $length, "name" => $name, "thumbnail" => $thumbnail, "numViews" => $numViews);
+	patchFirebase('songs/'.$id,$videoData);
 } catch (Exception $e) {
     echo $e;
 }
