@@ -13,7 +13,7 @@
 	$number = $_REQUEST['From']; // gets the sender of the message received	
 	$isAdmin = 0; //0 is not admin
 	
-
+	$counter = 1;
 	//confirm user is admin
 	if($number == "+17145857755")
 	{
@@ -30,7 +30,7 @@
 	//new session
 	if($counter == 0)
 	{
-		$text = "Text back any of the following commands: 'add' <SONG NAME>, 'info' (get song information),";
+		$text = "Text back any of the following commands: 'add <SONG NAME>', 'info' (get song information),";
 		$textA = "'queue' (see playlist queue), 'options' (list all commands), OR text us how you feel about the song";		
 		$textB = "ADMIN OPTIONS: 'skip', '+' (to increase volume), '-' (to decrease volume)";
 	
@@ -49,9 +49,10 @@
 		//strip out important stuff from string
 		$song = substr($body, 4);
 		
-
+		$responseName = file_get_contents("http://testappshahid.aws.af.cm/addSong.php?song=".urlencode($song));
 		//send song request to backend
-		$text = $song . " has been added to the queue!";	
+		$text = $responseName . " has been added to the queue!";	
+
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
 	}
 	//get info
@@ -68,7 +69,7 @@
 	}
 	else if(strtolower(substr($body, 0, 8))=="options")
 	{
-		$text = "Text back any of the following commands: 'add' <SONG NAME>, 'info' (get song information),";
+		$text = "Text back any of the following commands: 'add <SONG NAME>', 'info' (get song information),";
 		$textA = "'queue' (see playlist queue), 'options' (list all commands), OR text us how you feel about the song";		
 		$textB = "ADMIN OPTIONS: 'skip', '+' (to increase volume), '-' (to decrease volume)";
 	
@@ -105,31 +106,12 @@
 		$text = "song was skipped";	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
-	/*else
-	{
-		//handle up/downvoting song currently playing
-
-		//getCurrentSong
-		
-		//strip up/vote from song
-
-		//send text info to backend for sentiment analysis and voting		
-		//$sentiment = getVoteResponse()
-		$sentiment = "";
-		if($sentiment == -1)
-		{
-			$text = "That's too bad";					
-		}
-		else if($sentiment == 0)
-		{
-			$text = "Meh";					
-		}
-		else
-		{
-			$text = "Awesome";					
-		}
-		
-	}*/
+	else
+	{		
+		$sentiment = file_get_contents("http://testappshahid.aws.af.cm/getSentiment.php?text=".$body);
+		$text = "Your comment was " . $sentiment;
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);		
+	}
 
 	//save session for future
 	$_SESSION['counter'] = $counter;
