@@ -41,29 +41,39 @@
 	              events: {
 	                'onStateChange': onPlayerStateChange
 	              }});
+			firebase.child(songs[0]).once('value', function(dataSnapshot) {
+				 firebase.parent().child('current').set(dataSnapshot.val());
+				$("#"+songs[0]).remove();
+				firebase.child(songs[0]).remove();
+				songs.splice(0,1);
+				});
 		}
         function onPlayerStateChange(event) {        
             if(event.data === 0&&songs.length>1) {
-				firebase.child(songs[0]).remove();
-				songs.splice(0,1);
-				$("#"+songs[0]).remove();
 				player.loadVideoById(songs[0], 5, "large");
+				firebase.child(songs[0]).once('value', function(dataSnapshot) {
+					 firebase.parent().child('current').set(dataSnapshot.val());
+					$("#"+songs[0]).remove();
+					firebase.child(songs[0]).remove();
+					songs.splice(0,1);
+					});
             }
         }
 			firebase.on('child_added', function(snapshot, prevChildName) {
 			  	songs.push(snapshot.name());
+				$("#queue").append('<div id="'+snapshot.name()+'">Id: '+snapshot.name()+'<br/>Title: '+snapshot.child('name').val()+'<br/>Length: '+snapshot.child('length').val()+'<br/>Thumbnail: '+snapshot.child('thumbnail').val()+'<br/>Num Views: '+snapshot.child('numViews').val()+'<br/>Priority: '+snapshot.getPriority()+'</div>');
 				if(first) {
 					first=false;
 					addFirstYoutubeVideo();
-				} else {
-					$("#queue").append('<div id="'+snapshot.name()+'">Id: '+snapshot.name()+'<br/>Title: '+snapshot.child('name').val()+'<br/>Length: '+snapshot.child('length').val()+'<br/>Thumbnail: '+snapshot.child('thumbnail').val()+'<br/>Num Views: '+snapshot.child('numViews').val()+'<br/>Priority: '+snapshot.getPriority()+'</div>');
 				}
 			});
 
 			firebase.on('child_moved', function(snapshot, prevChildName) {
-			  var userName = snapshot.name(), userData = snapshot.val();
-			  var where = (prevChildName === null) ? 'at the beginning' : 'after ' + prevChildName;
-			  alert('User ' + userName + ' should now appear ' + where);
+				if(prevChildName==null) {
+					$("#queue").prepend($("#"+snapshot.name()).remove());
+				} else {
+					$("#"+prevChildName).after($("#"+snapshot.name()).remove());
+				}
 			});
 		</script>
 
