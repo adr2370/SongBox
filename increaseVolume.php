@@ -19,5 +19,15 @@ function patchFirebase($location,$data,$type)
 }
 $number=$_GET['val'];
 $oldVolume=file_get_contents("https://adr2370.firebaseio.com/playerdb/volume/.json");
-patchFirebase('playerdb/volume',$oldVolume+$number,"PUT");
+$updateVal = 50;
+if($number > 0)
+{
+	$updateVal = min(100,$number+$oldVolume);
+}
+else
+{
+	$updateVal = max(0,$number+$oldVolume);
+}
+
+patchFirebase('playerdb/volume',$updateVal,"PUT");
 ?>
