@@ -16,12 +16,19 @@
   });
 
   dancer = new Dancer();
+
   kick = dancer.createKick({
     onKick: function () {
-      ctx.fillStyle = 'ff0077';
+      ctx.fillStyle = '#536895';
+	  ctx.shadowBlur = 20;
+	  ctx.shadowOffsetX=5;
+	  ctx.shadowColor="black";
     },
     offKick: function () {
-      ctx.fillStyle = '#666';
+      ctx.fillStyle = '#b78727';
+	  ctx.shadowBlur = 20;
+	  ctx.shadowOffsetX=5;
+	  ctx.shadowColor="black";
     }
   }).on();
 

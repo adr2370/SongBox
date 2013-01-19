@@ -27,11 +27,14 @@
 
 		<div id="youtube"></div>
 		<div id="queue"></div>
+		<div id="comments"></div>
 		<script type='text/javascript'>
 		var first=true;
-	      var player;
-		  var firebase = new Firebase('https://adr2370.firebaseio.com/songs');
-		  var playerdb = new Firebase('https://adr2370.firebaseio.com/playerdb');
+	    var player;
+		var firebase = new Firebase('https://adr2370.firebaseio.com/songs');
+		var playerdb = new Firebase('https://adr2370.firebaseio.com/playerdb');
+		var commentDB = new Firebase('https://adr2370.firebaseio.com/comments');
+
 		var songs=new Array();
 		function addFirstYoutubeVideo() {
 			player=new YT.Player('youtube', {
@@ -56,7 +59,7 @@
             if(event.data === 0&&songs.length>1) {
 				player.loadVideoById(songs[0], 5, "large");
 				firebase.child(songs[0]).once('value', function(dataSnapshot) {
-					 firebase.parent().child('current').set(dataSnapshot.val());
+					firebase.parent().child('current').set(dataSnapshot.val());
 					$("#"+songs[0]).remove();
 					firebase.child(songs[0]).remove();
 					songs.splice(0,1);
@@ -82,6 +85,8 @@
 
 			playerdb.on('child_changed', function(snapshot, prevChildName) {
 				player.setVolume(snapshot.val());					
+			commentDB.on('child_added', function(snapshot, prevChildName) {
+				$("#comments").append(snapshot.val()+"<br/>");
 			});
 		</script>
 
