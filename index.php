@@ -56,14 +56,19 @@
 
 		}
         function onPlayerStateChange(event) {        
-            if(event.data === 0&&songs.length>0) {
-				player.loadVideoById(songs[0], 5, "large");
-				firebase.child(songs[0]).once('value', function(dataSnapshot) {
-					firebase.parent().child('current').set(dataSnapshot.val());
-					$("#"+songs[0]).remove();
-					firebase.child(songs[0]).remove();
-					songs.splice(0,1);
-					});
+            if(event.data === 0) {
+				if(songs.length>0) {
+					player.loadVideoById(songs[0], 5, "large");
+					firebase.child(songs[0]).once('value', function(dataSnapshot) {
+						firebase.parent().child('current').set(dataSnapshot.val());
+						$("#"+songs[0]).remove();
+						firebase.child(songs[0]).remove();
+						songs.splice(0,1);
+						});
+				} else {
+					first=true;
+					player=null;
+				}
             }
         }
 			firebase.on('child_added', function(snapshot, prevChildName) {
