@@ -22,21 +22,16 @@
         <![endif]-->
 
         <!-- Add your site or application content here -->
-		<div id="youtube" onclick="sendSong()"></div>
-		<script type='text/javascript'>
+		<script type="text/javascript" src="https://cdn.firebase.com/v0/firebase.js"></script>
 
-			function sendSong() {
-				$.post('addSong.php','sup',songSent());
-			}
-			function songSent() {
-				console.log("SENT");
-			}
+		<div id="youtube"></div>
+		<script type='text/javascript'>
 		  // Get a reference to the root of the chat data.
 		  var firebase = new Firebase('https://adr2370.firebaseio.com/songs');
 
 		  // Add a callback that is triggered for each chat message.
 		  firebase.on('child_added', function (snapshot) {
-			console.log(snapshot);
+			$("#youtube").append(snapshot.name()+"<br/>");
 		  });
 		</script>
 
