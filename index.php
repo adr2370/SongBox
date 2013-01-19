@@ -31,13 +31,14 @@
 		var first=true;
 	      var player;
 		  var firebase = new Firebase('https://adr2370.firebaseio.com/songs');
+		  var playerdb = new Firebase('https://adr2370.firebaseio.com/playerdb');
 		var songs=new Array();
 		function addFirstYoutubeVideo() {
 			player=new YT.Player('youtube', {
 	              height: '390',
 	              width: '640',
 	              videoId: songs[0],
-				  playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3 },
+				  playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50 },
 	              events: {
 	                'onStateChange': onPlayerStateChange
 	              }});
@@ -47,6 +48,9 @@
 				firebase.child(songs[0]).remove();
 				songs.splice(0,1);
 				});
+
+			playerdb.child('volume').set(50);
+
 		}
         function onPlayerStateChange(event) {        
             if(event.data === 0&&songs.length>1) {
@@ -74,6 +78,10 @@
 				} else {
 					$("#"+prevChildName).after($("#"+snapshot.name()).remove());
 				}
+			});
+
+			playerdb.on('child_changed', function(snapshot, prevChildName) {
+				player.setVolume(snapshot.val());					
 			});
 		</script>
 

@@ -113,14 +113,17 @@
 	//volume control ONLY FOR OWNER OF THE ROOM
 	else if(strtolower(substr($body, 0, 1))=="+" && isAdmin)
 	{
-		$text = "volume increased by 10%";	
+		$text = "volume increased by 10%";
+		file_get_contents("http://testappshahid.aws.af.cm/increaseVolume.php?val=10");	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
 	else if(strtolower(substr($body, 0, 1))=="-" && isAdmin)
 	{
 		$text = "volume decreased by 10%";	
+		file_get_contents("http://testappshahid.aws.af.cm/increaseVolume.php?val=-10");	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
+	
 	else if(strtolower(substr($body, 0, 4))=="skip" && isAdmin)
 	{
 		$text = "song was skipped";	
