@@ -45,7 +45,8 @@
 	              videoId: songs[0],
 				  playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50 },
 	              events: {
-	                'onStateChange': onPlayerStateChange
+	                'onStateChange': onPlayerStateChange,
+					'onError': onError
 	              }});
 			firebase.child(songs[0]).once('value', function(dataSnapshot) {
 				 firebase.parent().child('current').set(dataSnapshot.val());	
@@ -85,6 +86,10 @@
 				nextVideo();
             }
         }
+		
+		function onError(event) {
+			nextVideo();
+		}
 
 		current.on('child_changed', function(snapshot, prevChildName) {
 			if(snapshot.name()=="rating") {
