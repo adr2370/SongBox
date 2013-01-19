@@ -10,17 +10,8 @@ $firstKey = $arr[0];
 //print_r($data);
 $songName = $data->$firstKey->name;
 $seconds = $data->$firstKey->length;
-/*echo $songName."<br>";
-echo $songDuration;*/
-$length = floor($seconds/60) . " minutes and " . $seconds % 60 . " seconds long";
+$length = floor($seconds/60) . " mins " . $seconds % 60 . " secs long";
 
 $message = $songName. " is " . $length;
 echo $message;
-
-//print_r($arr);
-/*$songName = $data[0];
-print_r($songName);*/
-//$songDuration = $data[0]['length'];
-/*echo $songName."<br>";
-echo $songDuration;*/
 ?>

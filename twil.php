@@ -64,8 +64,15 @@
 	//get queue
 	else if(strtolower(substr($body, 0, 6))=="queue")
 	{
-		$text = "here is the list of songs";	
-		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
+		$text = file_get_contents("http://testappshahid.aws.af.cm/getQueue.php");	
+
+		$convert = explode("<br>", $text); //create array separate by new line
+
+		for ($i=0;$i<count($convert);$i++)  
+		{		    
+		    $sms = $client->account->sms_messages->create("949-391-4022",$number, $convert[$i]);
+		}
+		//$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
 	}
 	else if(strtolower(substr($body, 0, 8))=="options")
 	{
@@ -108,7 +115,7 @@
 	}
 	else
 	{		
-		$sentiment = file_get_contents("http://testappshahid.aws.af.cm/getSentiment.php?text=".$body);
+		$sentiment = file_get_contents("http://testappshahid.aws.af.cm/getSentiment.php?text=".urlencode($body));
 		$text = "Your comment was " . $sentiment;
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);		
 	}
