@@ -15,9 +15,9 @@
       ctx     = canvasEl.getContext( '2d' ),
       h       = canvasEl.height,
       w       = canvasEl.width,
-      width   = options.width || 1,
-      spacing = options.spacing || 0,
-      count   = options.count || 512;
+      width   = options.width || 20,
+      spacing = options.spacing || 2,
+      count   = options.count || 256;
 
     ctx.fillStyle = options.fillStyle || "white";
 
