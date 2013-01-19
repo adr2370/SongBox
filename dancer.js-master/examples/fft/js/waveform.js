@@ -1,12 +1,10 @@
 (function () {
-
   var
     // AUDIO_FILE = 'http://r7---sn-a8au-p5qs.c.youtube.com/videoplayback?sparams=cp%2Cid%2Cip%2Cipbits%2Citag%2Cratebypass%2Csource%2Cupn%2Cexpire&ipbits=8&fexp=920704%2C912806%2C922403%2C922405%2C929901%2C913605%2C925710%2C929104%2C929110%2C908493%2C920201%2C913302%2C919009%2C911116%2C910221%2C901451&expire=1358611399&source=youtube&upn=UeYOIpN8aiE&ip=158.130.103.122&key=yt1&itag=43&cp=U0hUTVZMT19OU0NONF9ORlNEOmFYV1Z5ZlJiNXZW&mt=1358586551&id=ac473948df168d34&mv=m&sver=3&ratebypass=yes&ms=au&title=Youtube%20Poop%3A%20Pride%20Patties&signature=3C79AF48039CE5B3814142165EACCE105A181C80.74EEA2E09D4FF4239834242B172BC8AAD686C994',
     AUDIO_FILE = '../songs/14  Basshunter - Dota',
-	fft = document.getElementById( 'canv' ),
-    ctx = fft.getContext( '2d' ),
+	waveform = document.getElementById( 'canv' ),
+    ctx = waveform.getContext( '2d' ),
     dancer, kick;
-
   /*
    * Dancer.js magic
    */
@@ -19,23 +17,17 @@
 
   kick = dancer.createKick({
     onKick: function () {
-      ctx.fillStyle = '#536895';
-	  ctx.shadowBlur = 20;
-	  ctx.shadowOffsetX=5;
-	  ctx.shadowColor="black";
+      ctx.strokeStyle = '#536895';
     },
     offKick: function () {
-      ctx.fillStyle = '#b78727';
-	  ctx.shadowBlur = 20;
-	  ctx.shadowOffsetX=5;
-	  ctx.shadowColor="black";
-    }
+      ctx.strokeStyle = '#b78727';
+	}
   }).on();
 
   dancer
-    .fft( fft, { fillStyle: '#666' })
-    .load({ src: AUDIO_FILE, codecs: ['mp3', 'webm']});
-
+    .load({ src: AUDIO_FILE, codecs: ['mp3', 'webm']})
+    .waveform( waveform, { strokeStyle: '#666', strokeWidth: 2 });
+	
   Dancer.isSupported() || loaded();
   !dancer.isLoaded() ? dancer.bind( 'loaded', loaded ) : loaded();
 
