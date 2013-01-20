@@ -15,7 +15,7 @@ class Dropbox
 	//they can be found at https://www.dropbox.com/developers/apps
 	private static $APP_KEY 		= 'hdgtbqmtbf0ej7b';
 	private static $APP_SECRET		= '3hemjakk5p9dbmb';
-	private static $CALLBACK_URL 		= 'http://songbox.co/getSongbox.php';
+	private static $CALLBACK_URL 	= 'http://songbox.co/example.php';
 	
 	//OAuth 1.0 variables
 	private $request_token_url;		//url to dropbox.com to get authorization
@@ -214,11 +214,6 @@ class Dropbox
 	function filesGet($root,$path)
 	{
 		return $this->call('https://api-content.dropbox.com/1/files/'.$root.'/'.$path);
-	}
-
-	function getMetadata($root,$path)
-	{
-		return $this->call('https://api-content.dropbox.com/1/metadata/'.$root.'/'.$path);
 	}
 
 
