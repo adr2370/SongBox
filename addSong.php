@@ -35,6 +35,7 @@ try {
 		$videoData = array("length" => $length, "name" => $name, "thumbnail" => $thumbnail, "numViews" => $numViews, ".priority" => $priority, "type" => $type, $number => 1);
 		patchFirebase('',$priorityData,"PATCH");
 		patchFirebase('songs/'.$id,$videoData,"PUT");
+		file_get_contents('http://songbox.co/cgi-bin/first.cgi?'.$id);
 	} else {
 		if(file_get_contents("https://adr2370.firebaseio.com/songs/".$id."/".$number."/.json")=="null") {
 			$currPriority=intval(file_get_contents("https://adr2370.firebaseio.com/songs/".$id."/.priority/.json"));
