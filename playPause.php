@@ -17,5 +17,6 @@ function patchFirebase($location,$data,$type)
 	$chleaderrmsg = curl_error($chlead);
 	curl_close($chlead);
 }
-patchFirebase("current/skip",1,"PUT");
+$which=$_GET['which'];
+patchFirebase('current/'.$which,1,"PUT");
 ?>

@@ -256,6 +256,8 @@ Text "Options" to (949)-391-4022 to start.
         current.set(dataSnapshot.val());
         current.child('rating').set(0);
         current.child('skip').set(0);
+        current.child('play').set(0);
+        current.child('pause').set(0);
         $("#"+songs[0]).remove();
         firebase.child(songs[0]).remove();
         songs.splice(0,1);
@@ -271,6 +273,8 @@ Text "Options" to (949)-391-4022 to start.
       commentDB.set(null);	
         current.child('rating').set(0);
         current.child('skip').set(0);
+        current.child('play').set(0);
+        current.child('pause').set(0);
       if(songs.length>0) {
         player.loadVideoById(songs[0], 5, "large");
         firebase.child(songs[0]).once('value', function(dataSnapshot) {
@@ -295,14 +299,24 @@ Text "Options" to (949)-391-4022 to start.
     function onError(event) {
       nextVideo();
     }
+	current.child('play').on('child_changed', function(snapshot, prevChildName) {
+		console.log(snapshot.name()+" "+snapshot.val());
+	});
 
     current.on('child_changed', function(snapshot, prevChildName) {
       //CHANGE RATING OR SKIP VIDEO
+console.log(snapshot.name()+" "+snapshot.val());
       if(snapshot.name()=="rating") {
 		setMeter(snapshot.val());
-      } else if(snapshot.name()=="skip"&&snapshot.val()=="1") {
+      } else if(snapshot.name()=="skip"&&snapshot.val()==1) {
         nextVideo();
-      }
+      } else if(snapshot.name()=="play"&&snapshot.val()==1) {	
+        current.child('play').set(0);
+		player.playVideo();
+	  } else if(snapshot.name()=="pause"&&snapshot.val()==1) {	
+        current.child('pause').set(0);
+		player.pauseVideo();
+	  }
     });
 
       firebase.on('child_added', function(snapshot, prevChildName) {
