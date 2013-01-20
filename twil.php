@@ -33,15 +33,20 @@
 	if($counter == 0)
 	{
 		$text = "Text back any of the following commands: 'add <SONG NAME>', 'karaoke <SONG NAME>', 'info' (get song information),";
+		$textC = "'visualize' (get trippy), 'songbox' (get a link to mp3 files)"
 		$textA = "'queue' (see playlist queue), 'options' (list all commands), OR text us how you feel about the song";		
+		
 		$textB = "ADMIN OPTIONS: 'skip', '+' (to increase volume), '-' (to decrease volume)";
-	
+		$textD = "'play', 'pause', 'fullscreen'";
 	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, $textC);
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $textA);
+		
 		if($isAdmin)
 		{
 			$sms = $client->account->sms_messages->create("949-391-4022",$number, $textB);
+			$sms = $client->account->sms_messages->create("949-391-4022",$number, $textD);			
 		}
 		$counter++;
 	}
@@ -103,15 +108,20 @@
 	else if(strtolower(substr($body, 0, 7))=="options")
 	{
 		$text = "Text back any of the following commands: 'add <SONG NAME>', 'karaoke <SONG NAME>', 'info' (get song information),";
+		$textC = "'visualize' (get trippy), 'songbox' (get a link to mp3 files)"
 		$textA = "'queue' (see playlist queue), 'options' (list all commands), OR text us how you feel about the song";		
+		
 		$textB = "ADMIN OPTIONS: 'skip', '+' (to increase volume), '-' (to decrease volume)";
-	
+		$textD = "'play', 'pause', 'fullscreen'";
 	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, $textC);
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $textA);
+		
 		if($isAdmin)
 		{
 			$sms = $client->account->sms_messages->create("949-391-4022",$number, $textB);
+			$sms = $client->account->sms_messages->create("949-391-4022",$number, $textD);			
 		}
 	}
 	else if(strtolower(substr($body, 0, 5))=="clear")
@@ -160,6 +170,13 @@
 	{		
 		$text = "paused";	
 		file_get_contents($url."playPause.php?which=pause");	
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
+	}
+
+	else if(strtolower(substr($body, 0, 9))=="fullscreen" && $isAdmin)
+	{		
+		$text = "enter fullscreen mode";	
+		file_get_contents($url."fullscreen.php");	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
 
