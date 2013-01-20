@@ -5,7 +5,7 @@ function patchFirebase($location,$data,$type)
 	$chlead = curl_init();
 	curl_setopt($chlead, CURLOPT_URL, 'https://adr2370.firebaseio.com/'.$location.'/.json');
 	curl_setopt($chlead, CURLOPT_USERAGENT, 'SugarConnector/1.4');
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+	curl_setopt($chlead, CURLOPT_HTTPHEADER, array(
 	    'Content-Type: application/json'
 	));
 	curl_setopt($chlead, CURLOPT_VERBOSE, 1);
