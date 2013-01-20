@@ -259,6 +259,7 @@ Text "Options" to (949)-391-4022 to start.
 	        current.child('skip').set(0);
 	        current.child('play').set(0);
 	        current.child('pause').set(0);
+	        current.child('fullScreen').set(0);
 			if(dataSnapshot.child('type').val()=="visualize") {
 				isYoutube=false;
 				window.songTime=dataSnapshot.child('length').val();
@@ -330,6 +331,9 @@ Text "Options" to (949)-391-4022 to start.
 		} else {
 			window.dancer.pause();
 		}
+	  }	 else if(snapshot.name()=="fullScreen"&&snapshot.val()==1) {	
+        current.child('fullScreen').set(0);
+		window.fullScreen();
 	  }
     });
 
