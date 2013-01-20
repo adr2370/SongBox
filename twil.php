@@ -12,7 +12,7 @@
 	$body = $_REQUEST['Body']; // gets the body of the message received
 	$number = $_REQUEST['From']; // gets the sender of the message received	
 	$isAdmin = false; //0 is not admin
-	$url = 'http://adr.aws.af.cm/';
+	$url = 'http://test.yourperfectbeauty.com/pennapps/';
 	
 	$counter = 1;	
 	//confirm user is admin
