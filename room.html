@@ -366,7 +366,7 @@ Text "Options" to (949)-391-4022 to start.
       commentDB.on('child_added', function(snapshot, prevChildName) {
         //COMMENTS ADDED
         //snapshot.val() is each comment
-        $("#comments").prepend(snapshot.val()+"<br/>");
+        $("#comments").prepend("<p style=\"font-size:100\">" + snapshot.val()+"</p>");
       });
     </script>
 
