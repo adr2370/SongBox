@@ -142,7 +142,14 @@
       vertexColor: 0xFFFFFF
     });
   }
-
+  function fullScreen() {
+	if( THREEx.FullScreen.activated() ){
+    THREEx.FullScreen.cancel();
+	}else{
+		THREEx.FullScreen.request();
+		window.onresize = window.onWindowResize;
+	}}, false);
+	
   function loaded () {
     var
       loading = document.getElementById( 'loading' ),
