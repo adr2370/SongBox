@@ -63,7 +63,7 @@
   }).load({ src: AUDIO_FILE, codecs: [ 'mp3', 'webm' ]});
 
 	dancer.onceAt(window.songTime, function() {
-		visualFinished();
+		nextVideo();
 	});
 
   Dancer.isSupported() || loaded();
