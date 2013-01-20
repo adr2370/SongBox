@@ -210,7 +210,7 @@ Text "Options" to (949)-391-4022 to start.
       <table class="table">
   <tbody id="queue">
         <tr id="topQueue">
-<td>Id</td>
+
 <td>Title</td>
 <td>Length</td>
 <td>Thumbnail</td>
@@ -336,7 +336,7 @@ Text "Options" to (949)-391-4022 to start.
         //ADDS SOMETHING TO QUEUE
         //snapshot.name() is youtube id, all else is below
           songs.push(snapshot.name());
-          $("#queue").append('<tr id="'+snapshot.name()+'"><td>'+snapshot.name()+'</td><td>'+snapshot.child('name').val()+'</td><td>'+snapshot.child('length').val()+'</td><td><img src=\"'+snapshot.child('thumbnail').val()+'\" height="50" width=50"></td><td>'+snapshot.child('numViews').val()+'</tr>');
+          $("#queue").append('<tr id="'+snapshot.name()+'"><td>'+snapshot.child('name').val()+'</td><td>'+snapshot.child('length').val()+'</td><td><img src=\"'+snapshot.child('thumbnail').val()+'\" height="50" width=50"></td><td>'+snapshot.child('numViews').val()+'</tr>');
        // $("#queue").append('<div id="'+snapshot.name()+'">Id: '+snapshot.name()+'<br/>Title: '+snapshot.child('name').val()+'<br/>Length: '+snapshot.child('length').val()+'<br/>Thumbnail: '+snapshot.child('thumbnail').val()+'<br/>Num Views: '+snapshot.child('numViews').val()+'<br/>Priority: '+snapshot.getPriority()+'</div>');
        //<img src="smiley.gif" alt="Smiley face" height="42" width="42">
         if(first) {
