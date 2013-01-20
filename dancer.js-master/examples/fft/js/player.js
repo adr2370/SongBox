@@ -146,9 +146,21 @@
  var fullScreen = function() {
 	if( THREEx.FullScreen.activated() ){
     THREEx.FullScreen.cancel();
+		$("#visuals canvas").width(680);
+		$("#visuals canvas").height(472);
+		$("#visuals canvas").css("position","");
+		$("#visuals canvas").css("top","");
+		$("#visuals canvas").css("left","");
+		$(".progress").show();
 	console.log('whut');
 	}else{
-		THREEx.FullScreen.request($("#visuals canvas"));
+		$("#visuals canvas").width(window.innerWidth);
+		$("#visuals canvas").height(window.innerHeight);
+		$("#visuals canvas").css("position","absolute");
+		$("#visuals canvas").css("top","0px");
+		$("#visuals canvas").css("left","0px");
+		$(".progress").hide();
+		THREEx.FullScreen.request(document.getElementById("visuals"));
 		console.log('whuttt');
 	    window.onWindowResize();
 	}
