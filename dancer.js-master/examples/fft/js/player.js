@@ -63,7 +63,7 @@
   }).load({ src: AUDIO_FILE, codecs: [ 'mp3', 'webm' ]});
 
 	dancer.onceAt(window.songTime, function() {
-		visualFinished();
+		nextVideo();
 	});
 
   Dancer.isSupported() || loaded();
@@ -142,17 +142,16 @@
       vertexColor: 0xFFFFFF
     });
   }
-	
+	var isFullScreen=false;
  var fullScreen = function() {
-	if( THREEx.FullScreen.activated() ){
-    THREEx.FullScreen.cancel();
+	if( isFullScreen ){
 		$("#visuals canvas").width(680);
 		$("#visuals canvas").height(472);
 		$("#visuals canvas").css("position","");
 		$("#visuals canvas").css("top","");
 		$("#visuals canvas").css("left","");
 		$(".progress").show();
-	console.log('whut');
+	    THREEx.FullScreen.cancel();
 	}else{
 		$("#visuals canvas").width(window.innerWidth);
 		$("#visuals canvas").height(window.innerHeight);
@@ -161,9 +160,9 @@
 		$("#visuals canvas").css("left","0px");
 		$(".progress").hide();
 		THREEx.FullScreen.request(document.getElementById("visuals"));
-		console.log('whuttt');
 	    window.onWindowResize();
 	}
+	isFullScreen=!isFullScreen;
   }
   
   window.fullScreen=fullScreen;
