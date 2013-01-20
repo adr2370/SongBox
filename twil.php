@@ -120,6 +120,11 @@
 		$text = "everything was cleared";	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
+	else if(strtolower(substr($body, 0, 7))=="songbox")
+	{		
+		$text = file_get_contents($url."getSongbox.php");			
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
+	}
 
 	//ADMIN PANEL
 	//volume control ONLY FOR OWNER OF THE ROOM
