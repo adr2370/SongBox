@@ -148,7 +148,7 @@
     THREEx.FullScreen.cancel();
 	console.log('whut');
 	}else{
-		THREEx.FullScreen.request();
+		THREEx.FullScreen.request(window.renderer.domElement);
 		console.log('whuttt');
 	    window.onresize = window.onWindowResize;
 	}

@@ -14,7 +14,7 @@
   window.scene = new THREE.Scene();
   window.group = new THREE.Object3D();
   window.camera;
-
+  window.renderer;
   init();
   animate();
 
