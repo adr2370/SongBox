@@ -122,7 +122,7 @@
 	}
 	else if(strtolower(substr($body, 0, 7))=="songbox")
 	{		
-		$text = file_get_contents($url."getSongbox.php");			
+		$text = "http://db.tt/3Vg4wCey";			
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
 
