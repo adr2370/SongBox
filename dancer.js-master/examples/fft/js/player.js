@@ -143,7 +143,7 @@
     });
   }
 	
-  function fullScreen() {
+ var fullScreen = function() {
 	if( THREEx.FullScreen.activated() ){
     THREEx.FullScreen.cancel();
 	}else{
