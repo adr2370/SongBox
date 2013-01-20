@@ -150,7 +150,7 @@
 	}else{
 		THREEx.FullScreen.request(window.renderer.domElement);
 		console.log('whuttt');
-	    window.onresize = window.onWindowResize;
+	    window.onWindowResize();
 	}
   }
   
