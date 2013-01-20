@@ -146,8 +146,10 @@
  var fullScreen = function() {
 	if( THREEx.FullScreen.activated() ){
     THREEx.FullScreen.cancel();
+	console.log('whut');
 	}else{
 		THREEx.FullScreen.request();
+		console.log('whuttt');
 	    window.onresize = window.onWindowResize;
 	}
   }
