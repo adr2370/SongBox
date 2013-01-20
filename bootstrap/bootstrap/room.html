@@ -268,21 +268,20 @@ Text "Options" to (949)-391-4022 to start.
     function nextVideo() {
 	setMeter(0);
       $("#comments").html("");
-      commentDB.set(null);
+      commentDB.set(null);	
+        current.child('rating').set(0);
+        current.child('skip').set(0);
       if(songs.length>0) {
         player.loadVideoById(songs[0], 5, "large");
         firebase.child(songs[0]).once('value', function(dataSnapshot) {
           current.set(dataSnapshot.val());
-          current.child('rating').set(0);
-          current.child('skip').set(0);
           $("#"+songs[0]).remove();
           firebase.child(songs[0]).remove();
           songs.splice(0,1);
           });
       } else {
         first=true;
-        $("#youtube").remove();
-        $("#queue").before("<div id='youtube'></div>");
+        $("#youtube").replaceWith($('<div id="youtube"></div>'));
         player=null;
       }
     }
