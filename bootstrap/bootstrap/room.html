@@ -299,13 +299,9 @@ Text "Options" to (949)-391-4022 to start.
     function onError(event) {
       nextVideo();
     }
-	current.child('play').on('child_changed', function(snapshot, prevChildName) {
-		console.log(snapshot.name()+" "+snapshot.val());
-	});
 
     current.on('child_changed', function(snapshot, prevChildName) {
       //CHANGE RATING OR SKIP VIDEO
-console.log(snapshot.name()+" "+snapshot.val());
       if(snapshot.name()=="rating") {
 		setMeter(snapshot.val());
       } else if(snapshot.name()=="skip"&&snapshot.val()==1) {
