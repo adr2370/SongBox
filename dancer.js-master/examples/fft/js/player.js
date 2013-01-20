@@ -148,8 +148,8 @@
     THREEx.FullScreen.cancel();
 	}else{
 		THREEx.FullScreen.request();
-		// window.onresize = window.onWindowResize;
-	}, false);
+	    window.onresize = window.onWindowResize;
+	}
   }
 
 	
