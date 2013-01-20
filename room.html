@@ -261,11 +261,17 @@ Text "Options" to (949)-391-4022 to start.
 			if(dataSnapshot.child('type').val()=="visualize") {
 				isYoutube=false;
 				window.songTime=dataSnapshot.child('length').val();
-				window.audioFile='dancer.js-master/examples/songs/14  Basshunter - Dota';
+				window.audioFile='Dropbox/'+songs[0];
 				$("head").append('<script src="dancer.js-master/examples/fft/js/scene.js"></sc'+'ript>');
 				$("head").append('<script src="dancer.js-master/examples/fft/js/player.js"></sc'+'ript>');
+		        $("#youtube").replaceWith($('<div id="youtube"></div>'));
+		        player=null;
 			} else {
 				isYoutube=true;
+				$("#visuals canvas").remove();
+				if(window.dancer!=null) {
+					window.dancer.pause();
+				}
 				//youtube video
 				if(player==null) {
 					player=new YT.Player('youtube', {
@@ -307,8 +313,7 @@ Text "Options" to (949)-391-4022 to start.
       //CHANGE RATING OR SKIP VIDEO
       if(snapshot.name()=="rating") {
 		setMeter(snapshot.val());
-      } else if(snapshot.name()=="skip"&&snapshot.val()==1) {	
-		window.dancer.pause();
+      } else if(snapshot.name()=="skip"&&snapshot.val()==1) {
         nextVideo();
       } else if(snapshot.name()=="play"&&snapshot.val()==1) {	
         current.child('play').set(0);
