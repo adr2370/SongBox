@@ -148,7 +148,7 @@
     THREEx.FullScreen.cancel();
 	console.log('whut');
 	}else{
-		THREEx.FullScreen.request(window.renderer.domElement);
+		THREEx.FullScreen.request($("#visuals canvas"));
 		console.log('whuttt');
 	    window.onWindowResize();
 	}
