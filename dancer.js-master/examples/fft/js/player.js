@@ -149,7 +149,8 @@
 	}else{
 		THREEx.FullScreen.request();
 		// window.onresize = window.onWindowResize;
-	}}, false);
+	}, false);
+  }
 
 	
   function loaded () {
