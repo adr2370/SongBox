@@ -14,11 +14,14 @@ body {
   font-style: oblique;
   font-family: fantasy;
   padding-bottom: 25px;
-  background-image:url('img/abcde.jpg');
+ background: url(img/abcde.jpg) no-repeat center center fixed;
   background-size: cover;
+ 
   -webkit-border-radius: 6px;  
   -moz-border-radius: 6px;  
   border-radius: 6px;   
+    height:100%   
+          position: relative;
 }
 h2 {
  color:#536895;
@@ -191,8 +194,8 @@ Text "Options" to (949)-391-4022 to start.
 	}
 	</script>
 
-    <div class="row-fluid">
-     <div class="span6" style="background-color:#666666;">
+    <div class="row-fluid" >
+     <div class="span6" style="background-color:#666666;height:513px;overflow:hidden;">
       <br>
       <div id="youtube"></div>
       <br>
@@ -202,9 +205,9 @@ Text "Options" to (949)-391-4022 to start.
      </blockquote>
      </div>
   
-     <div class="span6" style="background-color:#333333;color:#888888;">
+     <div class="span6" style="background-color:#333333;color:#888888;height:513px;overflow:hidden;">
       <table class="table">
-	<tbody id="queue">
+  <tbody id="queue">
         <tr id="topQueue">
 <td>Id</td>
 <td>Title</td>
