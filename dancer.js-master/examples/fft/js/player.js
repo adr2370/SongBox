@@ -151,6 +151,8 @@
 	    window.onresize = window.onWindowResize;
 	}
   }
+  
+  window.fullScreen=fullScreen;
 
 	
   function loaded () {

@@ -37,6 +37,16 @@
     document.addEventListener( 'touchstart', onDocumentTouch, false );
     document.addEventListener( 'touchmove', onDocumentTouch, false );*/
   }
+  var onWindowResize = function(){
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth , window.innerHeight );
+}
+window.onWindowResize = onWindowResize;
+  
+
 
   function onDocumentMouseMove( event ) {
     mouseX = event.clientX - windowHalfX;
