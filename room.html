@@ -197,6 +197,7 @@ Text "Options" to (949)-391-4022 to start.
     <div class="row-fluid" >
      <div class="span6" style="background-color:#666666;height:513px;overflow:hidden;">
       <br>
+	<div id="thevisuals"></div>
       <div id="youtube"></div>
       <br>
 
@@ -232,6 +233,7 @@ Text "Options" to (949)-391-4022 to start.
 
     <div id="comments"></div>
     <script type='text/javascript'>
+	var isYoutube=false;
     var first=true;
       var player;
     var firebase = new Firebase('https://adr2370.firebaseio.com/songs');
@@ -240,51 +242,49 @@ Text "Options" to (949)-391-4022 to start.
     var current = new Firebase('https://adr2370.firebaseio.com/current');
 
     var songs=new Array();
-    function addFirstYoutubeVideo() {
-	setMeter(0);
-      $("#comments").html("");
-      commentDB.remove();
-      //CREATES YOUTUBE PLAYER
-      //Modify as you see fit, just don't screw with events or videoId
-      player=new YT.Player('youtube', {
-                height: '390',
-                width: '640',
-                videoId: songs[0],
-          playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50 },
-                events: {
-                  'onStateChange': onPlayerStateChange,
-          'onError': onError
-                }});
-      firebase.child(songs[0]).once('value', function(dataSnapshot) {
-        current.set(dataSnapshot.val());
-        current.child('rating').set(0);
-        current.child('skip').set(0);
-        current.child('play').set(0);
-        current.child('pause').set(0);
-        $("#"+songs[0]).remove();
-        firebase.child(songs[0]).remove();
-        songs.splice(0,1);
-        });
-
-      playerdb.child('volume').set(50);
-
-    }
     
+	function visualFinished() {
+		console.log("VISUAL DONE");
+	}
+
     function nextVideo() {
 	setMeter(0);
       $("#comments").html("");
-      commentDB.set(null);	
-        current.child('rating').set(0);
-        current.child('skip').set(0);
-        current.child('play').set(0);
-        current.child('pause').set(0);
-      if(songs.length>0) {
-        player.loadVideoById(songs[0], 5, "large");
+      commentDB.remove();
+      if(songs.length>0) {	
         firebase.child(songs[0]).once('value', function(dataSnapshot) {
           current.set(dataSnapshot.val());
-          $("#"+songs[0]).remove();
-          firebase.child(songs[0]).remove();
-          songs.splice(0,1);
+	        current.child('rating').set(0);
+	        current.child('skip').set(0);
+	        current.child('play').set(0);
+	        current.child('pause').set(0);
+			if(dataSnapshot.child('type').val()=="visualize") {
+				isYoutube=false;
+				window.songTime=dataSnapshot.child('length').val();
+				window.audioFile='dancer.js-master/examples/songs/14  Basshunter - Dota';
+				$("head").append('<script src="dancer.js-master/examples/fft/js/scene.js"></sc'+'ript>');
+				$("head").append('<script src="dancer.js-master/examples/fft/js/player.js"></sc'+'ript>');
+			} else {
+				isYoutube=true;
+				//youtube video
+				if(player==null) {
+					player=new YT.Player('youtube', {
+				            height: '390',
+			                width: '640',
+			                videoId: songs[0],
+			          playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50 },
+			                events: {
+			                  'onStateChange': onPlayerStateChange,
+			          'onError': onError
+			                }});
+				} else {
+					player.loadVideoById(songs[0], 5, "large");
+				}
+				$("#visuals canvas").hide();
+			}
+	        $("#"+songs[0]).remove();
+	        firebase.child(songs[0]).remove();
+	        songs.splice(0,1);
           });
       } else {
         first=true;
@@ -307,14 +307,23 @@ Text "Options" to (949)-391-4022 to start.
       //CHANGE RATING OR SKIP VIDEO
       if(snapshot.name()=="rating") {
 		setMeter(snapshot.val());
-      } else if(snapshot.name()=="skip"&&snapshot.val()==1) {
+      } else if(snapshot.name()=="skip"&&snapshot.val()==1) {	
+		window.dancer.pause();
         nextVideo();
       } else if(snapshot.name()=="play"&&snapshot.val()==1) {	
         current.child('play').set(0);
-		player.playVideo();
+		if(isYoutube) {
+			player.playVideo();
+		} else {
+			window.dancer.play();
+		}
 	  } else if(snapshot.name()=="pause"&&snapshot.val()==1) {	
         current.child('pause').set(0);
-		player.pauseVideo();
+		if(isYoutube) {
+			player.pauseVideo();
+		} else {
+			window.dancer.pause();
+		}
 	  }
     });
 
@@ -327,7 +336,7 @@ Text "Options" to (949)-391-4022 to start.
        //<img src="smiley.gif" alt="Smiley face" height="42" width="42">
         if(first) {
           first=false;
-          addFirstYoutubeVideo();
+          nextVideo();
         }
       });
 
@@ -342,7 +351,11 @@ Text "Options" to (949)-391-4022 to start.
       });
 
       playerdb.on('child_changed', function(snapshot, prevChildName) {
-        player.setVolume(snapshot.val());
+        if(isYoutube) {
+			player.setVolume(snapshot.val());
+		} else {
+			window.dancer.setVolume(snapshot.val()/100.0);
+		}
       });
       
       commentDB.on('child_added', function(snapshot, prevChildName) {
@@ -364,6 +377,25 @@ Text "Options" to (949)-391-4022 to start.
             g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
             s.parentNode.insertBefore(g,s)}(document,'script'));
         </script>
+		<div id="loading" style="display:none;">Loading . . .</div>
+		<!-- <canvas id="canv" height="300" width="500"></canvas> use this canvas if not 3d-->
+	
+		<script src="dancer.js-master/examples/lib/Three.js"></script>
+		<script src="dancer.js-master/examples/lib/Stats.js"></script>
+		<script src="dancer.js-master/examples/lib/Detector.js"></script>
+
+		<script src="dancer.js-master/src/dancer.js"></script>
+		<script src="dancer.js-master/src/support.js"></script>
+		<script src="dancer.js-master/src/kick.js"></script>
+		<script src="dancer.js-master/src/adapterWebkit.js"></script>
+		<script src="dancer.js-master/src/adapterMoz.js"></script>
+		<script src="dancer.js-master/src/adapterFlash.js"></script>
+		<script src="dancer.js-master/lib/fft.js"></script>
+		<script src="dancer.js-master/lib/flash_detect.js"></script>
+	<!-- 	<script src="../../plugins/dancer.fft.js"></script> //include if using fft or both
+		<script src="../../plugins/dancer.waveform.js"></script>//include if using waveform or both
+	 -->	<!-- Demo stuff -->
+	 <!-- include scene and player if 3d blasting -->
 
 <!-- End of Copied code -->
 

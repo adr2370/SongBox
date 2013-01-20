@@ -20,7 +20,8 @@
 
   function init() {
     container = document.createElement( 'div' );
-    document.body.appendChild( container );
+	container.id = "visuals";
+    document.getElementById("thevisuals").insertBefore( container );
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 3000 );
     camera.position.z = 1000;
 
@@ -28,12 +29,13 @@
     scene.add( group );
 
     renderer = new THREE.CanvasRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( 680, 472 );
     container.appendChild( renderer.domElement );
+	$("#visuals canvas").css("background-color","black");
 
-    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+    /*document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'touchstart', onDocumentTouch, false );
-    document.addEventListener( 'touchmove', onDocumentTouch, false );
+    document.addEventListener( 'touchmove', onDocumentTouch, false );*/
   }
 
   function onDocumentMouseMove( event ) {
@@ -64,4 +66,5 @@
     t++;
     renderer.render( scene, camera );
   }
+window.render=render;
 })();

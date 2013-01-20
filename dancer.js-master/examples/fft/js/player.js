@@ -1,7 +1,7 @@
 (function () {
 
   var
-    AUDIO_FILE        = '../songs/14  Basshunter - Dota',
+    AUDIO_FILE        = window.audioFile,
     PARTICLE_COUNT    = 250,
     MAX_PARTICLE_SIZE = 12,
     MIN_PARTICLE_SIZE = 2,
@@ -22,8 +22,8 @@
    * Dancer.js magic
    */
   Dancer.setOptions({
-    flashSWF : '../../lib/soundmanager2.swf',
-    flashJS  : '../../lib/soundmanager2.js'
+    flashSWF : 'dancer.js-master/examples/lib/soundmanager2.swf',
+    flashJS  : 'dancer.js-master/examples/lib/soundmanager2.js'
   });
 
   dancer = new Dancer();
@@ -60,7 +60,11 @@
     changeParticleMat( 'pink' );
   }).onceAt( 75, function () {
     changeParticleMat();
-  }).load({ src: AUDIO_FILE, codecs: [ 'mp3', 'webm' ]})
+  }).load({ src: AUDIO_FILE, codecs: [ 'mp3', 'webm' ]});
+
+	dancer.onceAt(window.songTime, function() {
+		visualFinished();
+	});
 
   Dancer.isSupported() || loaded();
   !dancer.isLoaded() ? dancer.bind( 'loaded', loaded ) : loaded();
@@ -157,10 +161,12 @@
       loading.appendChild( p );
     }
 
-    anchor.addEventListener( 'click', function () {
+    loading.addEventListener( 'click', function () {
       dancer.play();
       document.getElementById('loading').style.display = 'none';
     }, false );
+
+	dancer.play();
 
   }
 

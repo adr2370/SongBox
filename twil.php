@@ -69,6 +69,18 @@
 
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
 	}
+	//visual
+	else if(strtolower(substr($body, 0, 6))=="visual")
+	{
+		//strip out important stuff from string
+		$song = substr($body, 7);
+
+		$responseName = file_get_contents($url."addSong.php?song=".urlencode($song)."&number=".urlencode($number)."&type=".urlencode("visualize"));
+		//send song request to backend
+		$text = $responseName . " has been added to the queue!";	
+
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
+	}
 	//get info
 	else if(strtolower(substr($body, 0, 4))=="info")
 	{
