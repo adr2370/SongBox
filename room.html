@@ -1,416 +1,75 @@
-<!DOCTYPE html>   
-<html lang="en">   
-<head>   
-<meta charset="utf-8">   
-<title>SongBox</title>   
-<meta name="description" content="Creating a table with Twitter Bootstrap. Learn how to use Twitter Bootstrap toolkit to create Tables with examples.">  
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>
+			SongBox
+		</title>
+		<meta name="description" content="Creating a table with Twitter Bootstrap. Learn how to use Twitter Bootstrap toolkit to create Tables with examples.">
+		<link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+		<link href="css/bootstrap-responsive.css" rel="stylesheet" type="text/css">
+		<link href="css/G.css" rel="stylesheet" type="text/css">
+		<link href="css/home.css" rel="stylesheet" type="text/css">
+		<script src="js/vendor/modernizr-2.6.2.min.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div class="container" style="background-color:#000000;width:100%;min-height:60px;font-size:55px;padding-top:30px;color:#FFFFFF;">
+			Text "Options" to (949)-391-4022 to start.
+		</div>
+		<p>
+			<br>
+		</p>
+		<div class="container" style="padding-left:45px;padding-right:45px;">
+			<div class="progress" style="text-align:center;border-top-left-radius: 10px;border-top-right-radius: 10px;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px;">
+				<div id="meterRed" class="meter animate red" style="width: 583px; position: relative; left: -1px;"></div>
+				<div id="meterGreen" class="meter animate" style="width: 583px;"></div>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span6" style="background-color:#666666;height:700px;overflow:hidden;">
+				<br>
+				<div id="thevisuals"></div>
+				<div id="youtube"></div><br>
+				<blockquote style="font-size:100">
+					<div id="comments"></div>
+				</blockquote>
+			</div>
+			<div class="span6" style="background-color:#333333;color:#888888;height:700px;overflow:hidden;">
+				<table class="table">
+					<tbody id="queue">
+						<tr id="topQueue">
+							<td>
+								Title
+							</td>
+							<td>
+								Length
+							</td>
+							<td>
+								Thumbnail
+							</td>
+							<td>
+								Views
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<script type="text/javascript" src="https://cdn.firebase.com/v0/firebase.js"></script>
+		<script src="http://www.youtube.com/player_api" type="text/javascript"></script>
+		<script src="js/room.js" type="text/javascript"></script>
 
-    <link href="css/G.css" rel="stylesheet"> 
-    <style type="text/css">
-body {
-  text-align: center;
-  font-style: oblique;
-  font-family: fantasy;
-  padding-bottom: 25px;
- background: url(img/abcde.jpg) no-repeat center center fixed;
-  background-size: cover;
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+		<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
+		<script src="js/plugins.js"></script>
 
-  -webkit-border-radius: 6px;  
-  -moz-border-radius: 6px;  
-  border-radius: 6px;   
-    height:100%   
-          position: relative;
-}
-
-h2 {
- color:#536895;
-}
-		.meter { 
-			height: 25px;  /* Can be anything */
-			width: 235px;
-			display: inline-block;
-		}
-		.meter > span {
-			display: block;
-			height: 100%;
-			   -webkit-border-top-right-radius: 8px;
-			-webkit-border-bottom-right-radius: 8px;
-			       -moz-border-radius-topright: 8px;
-			    -moz-border-radius-bottomright: 8px;
-			           border-top-right-radius: 8px;
-			        border-bottom-right-radius: 8px;
-			    -webkit-border-top-left-radius: 20px;
-			 -webkit-border-bottom-left-radius: 20px;
-			        -moz-border-radius-topleft: 20px;
-			     -moz-border-radius-bottomleft: 20px;
-			            border-top-left-radius: 20px;
-			         border-bottom-left-radius: 20px;
-			background-color: rgb(43,194,83);
-			background-image: -webkit-gradient(
-			  linear,
-			  left bottom,
-			  left top,
-			  color-stop(0, rgb(43,194,83)),
-			  color-stop(1, rgb(84,240,84))
-			 );
-			background-image: -moz-linear-gradient(
-			  center bottom,
-			  rgb(43,194,83) 37%,
-			  rgb(84,240,84) 69%
-			 );
-			-webkit-box-shadow: 
-			  inset 0 2px 9px  rgba(255,255,255,0.3),
-			  inset 0 -2px 6px rgba(0,0,0,0.4);
-			-moz-box-shadow: 
-			  inset 0 2px 9px  rgba(255,255,255,0.3),
-			  inset 0 -2px 6px rgba(0,0,0,0.4);
-			box-shadow: 
-			  inset 0 2px 9px  rgba(255,255,255,0.3),
-			  inset 0 -2px 6px rgba(0,0,0,0.4);
-			position: relative;
-			overflow: hidden;
-		}
-		.meter > span:after, .animate > span > span {
-			content: "";
-			position: absolute;
-			top: 0; left: 0; bottom: 0; right: 0;
-			background-image: 
-			   -webkit-gradient(linear, 0 0, 100% 100%, 
-			      color-stop(.25, rgba(255, 255, 255, .2)), 
-			      color-stop(.25, transparent), color-stop(.5, transparent), 
-			      color-stop(.5, rgba(255, 255, 255, .2)), 
-			      color-stop(.75, rgba(255, 255, 255, .2)), 
-			      color-stop(.75, transparent), to(transparent)
-			   );
-			background-image: 
-				-moz-linear-gradient(
-				  -45deg, 
-			      rgba(255, 255, 255, .2) 25%, 
-			      transparent 25%, 
-			      transparent 50%, 
-			      rgba(255, 255, 255, .2) 50%, 
-			      rgba(255, 255, 255, .2) 75%, 
-			      transparent 75%, 
-			      transparent
-			   );
-			z-index: 1;
-			-webkit-background-size: 50px 50px;
-			-moz-background-size: 50px 50px;
-			background-size: 50px 50px;
-			-webkit-animation: move 2s linear infinite;
-			-moz-animation: move 2s linear infinite;
-			   -webkit-border-top-right-radius: 8px;
-			-webkit-border-bottom-right-radius: 8px;
-			       -moz-border-radius-topright: 8px;
-			    -moz-border-radius-bottomright: 8px;
-			           border-top-right-radius: 8px;
-			        border-bottom-right-radius: 8px;
-			    -webkit-border-top-left-radius: 20px;
-			 -webkit-border-bottom-left-radius: 20px;
-			        -moz-border-radius-topleft: 20px;
-			     -moz-border-radius-bottomleft: 20px;
-			            border-top-left-radius: 20px;
-			         border-bottom-left-radius: 20px;
-			overflow: hidden;
-		}
-		
-		.animate > span:after {
-			display: none;
-		}
-		
-		@-webkit-keyframes move {
-		    0% {
-		       background-position: 0 0;
-		    }
-		    100% {
-		       background-position: 50px 50px;
-		    }
-		}
-		
-		@-moz-keyframes move {
-		    0% {
-		       background-position: 0 0;
-		    }
-		    100% {
-		       background-position: 50px 50px;
-		    }
-		}
-		
-		
-		.orange > span {
-			background-color: #f1a165;
-			background-image: -moz-linear-gradient(top, #f1a165, #f36d0a);
-			background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #f1a165),color-stop(1, #f36d0a));
-			background-image: -webkit-linear-gradient(#f1a165, #f36d0a); 
-		}
-		
-		.red > span {
-			background-color: #f0a3a3;
-			background-image: -moz-linear-gradient(top, #f0a3a3, #f42323);
-			background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #f0a3a3),color-stop(1, #f42323));
-			background-image: -webkit-linear-gradient(#f0a3a3, #f42323);
-		}
-		
-		.nostripes > span > span, .nostripes > span:after {
-			-webkit-animation: none;
-			-moz-animation: none;
-			background-image: none;
-		}
-</style>
-<script src="js/vendor/modernizr-2.6.2.min.js"></script>
-</head>  
-
-<body>  
-<div class="container" style="background-color:#000000;width:100%;min-height:60px;font-size:55px;padding-top:30px;color:#FFFFFF;">
-Text "Options" to (949)-391-4022 to start.
-</div>
-
-<br>
-    <div class="container" style="padding-left:45px;padding-right:45px;">
-     	<div class="progress" style="text-align:center;border-top-left-radius: 10px;border-top-right-radius: 10px;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px;">
-				<div id="meterRed" class="meter animate red" style="width: 583px; position: relative; left: -1px;">
-					<span style="width: 1170px;border-top-right-radius:0px;border-bottom-right-radius:0px;z-index: 1;"><span></span></span>
-				</div>
-				<div id="meterGreen" class="meter animate" style="width: 583px;">
-					<span style="width: 2000px;border-top-left-radius:0px;z-index: 2;border-bottom-left-radius:0px;"><span></span></span>
-				</div>
-		      </div>
-    </div>
-
-	<script type="text/javascript">
-	function setMeter(rating) {
-		if(rating>=6) {
-			var x=500;
-		} else if(rating<=-6) {
-			var x=-500;
-		} else {
-			var x=rating*100;
-		}
-		var r=$("#meterRed");
-		var g=$("#meterGreen");
-		g.animate({width: (583+x)}, Math.abs(g.width()-(583+x)));
-		r.animate({width: (583-x)}, Math.abs(r.width()-(583-x)));
-	}
-	</script>
-
-    <div class="row-fluid" >
-     <div class="span6" style="background-color:#666666;height:700px;overflow:hidden;">
-      <br>
-	<div id="thevisuals"></div>
-      <div id="youtube"></div>
-      <br>
-
-     <blockquote style="font-size:100">
-     <div id="comments"></div>
-     </blockquote>
-     </div>
-  
-     <div class="span6" style="background-color:#333333;color:#888888;height:700px;overflow:hidden;">
-      <table class="table">
-  <tbody id="queue">
-        <tr id="topQueue">
-
-<td>Title</td>
-<td>Length</td>
-<td>Thumbnail</td>
-<td>Views</td>
-
-</tr>
-</tbody>
-</table>      
-
-        
-
-
-     </div>
-    </div>
-
-<!--Copied Code-->
-
-  <script type="text/javascript" src="https://cdn.firebase.com/v0/firebase.js"></script>
-    <script src="http://www.youtube.com/player_api"></script>
-
-    <div id="comments"></div>
-    <script type='text/javascript'>
-	var isYoutube=false;
-    var first=true;
-      var player;
-    var firebase = new Firebase('https://adr2370.firebaseio.com/songs');
-    var playerdb = new Firebase('https://adr2370.firebaseio.com/playerdb');
-    var commentDB = new Firebase('https://adr2370.firebaseio.com/comments');
-    var current = new Firebase('https://adr2370.firebaseio.com/current');
-
-    var songs=new Array();
-    
-	function visualFinished() {
-		console.log("VISUAL DONE");
-	}
-
-    function nextVideo() {
-	setMeter(0);
-      $("#comments").html("");
-      commentDB.remove();
-      if(songs.length>0) {	
-        firebase.child(songs[0]).once('value', function(dataSnapshot) {
-          current.set(dataSnapshot.val());
-	        current.child('rating').set(0);
-	        current.child('skip').set(0);
-	        current.child('play').set(0);
-	        current.child('pause').set(0);
-	        current.child('fullScreen').set(0);
-			if(dataSnapshot.child('type').val()=="visualize") {
-				isYoutube=false;
-				window.songTime=dataSnapshot.child('length').val();
-				window.audioFile='Dropbox/'+songs[0];
-				$("head").append('<script src="dancer.js-master/examples/fft/js/scene.js"></sc'+'ript>');
-				$("head").append('<script src="dancer.js-master/examples/fft/js/player.js"></sc'+'ript>');
-		        $("#youtube").replaceWith($('<div id="youtube"></div>'));
-		        player=null;
-			} else {
-				isYoutube=true;
-				$("#visuals canvas").remove();
-				if(window.dancer!=null) {
-					window.dancer.pause();
-				}
-				//youtube video
-				if(player==null) {
-					player=new YT.Player('youtube', {
-				            height: '390',
-			                width: '640',
-			                videoId: songs[0],
-			          playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50 },
-			                events: {
-			                  'onStateChange': onPlayerStateChange,
-			          'onError': onError
-			                }});
-				} else {
-					player.loadVideoById(songs[0], 5, "large");
-				}
-				$("#visuals canvas").hide();
-			}
-	        $("#"+songs[0]).remove();
-	        firebase.child(songs[0]).remove();
-	        songs.splice(0,1);
-          });
-      } else {
-        first=true;
-        $("#youtube").replaceWith($('<div id="youtube"></div>'));
-        player=null;
-      }
-    }
-    
-        function onPlayerStateChange(event) {        
-            if(event.data == 0) {
-        nextVideo();
-            }
-        }
-    
-    function onError(event) {
-      nextVideo();
-    }
-
-    current.on('child_changed', function(snapshot, prevChildName) {
-      //CHANGE RATING OR SKIP VIDEO
-      if(snapshot.name()=="rating") {
-		setMeter(snapshot.val());
-      } else if(snapshot.name()=="skip"&&snapshot.val()==1) {
-        nextVideo();
-      } else if(snapshot.name()=="play"&&snapshot.val()==1) {	
-        current.child('play').set(0);
-		if(isYoutube) {
-			player.playVideo();
-		} else {
-			window.dancer.play();
-		}
-	  } else if(snapshot.name()=="pause"&&snapshot.val()==1) {	
-        current.child('pause').set(0);
-		if(isYoutube) {
-			player.pauseVideo();
-		} else {
-			window.dancer.pause();
-		}
-	  }	 else if(snapshot.name()=="fullScreen"&&snapshot.val()==1) {	
-        current.child('fullScreen').set(0);
-		window.fullScreen();
-	  }
-    });
-
-      firebase.on('child_added', function(snapshot, prevChildName) {
-        //ADDS SOMETHING TO QUEUE
-        //snapshot.name() is youtube id, all else is below
-          songs.push(snapshot.name());
-          $("#queue").append('<tr style=\"font-size:30px;line-height:normal;\" id="'+snapshot.name()+'"><td style="line-height: normal;">'+snapshot.child('name').val()+'</td><td style="line-height: normal;">'+snapshot.child('length').val()+'</td><td><img src=\"'+snapshot.child('thumbnail').val()+'\" height="225" width=225"></td><td style="line-height: normal;">'+snapshot.child('numViews').val()+'</tr>');
-       // $("#queue").append('<div id="'+snapshot.name()+'">Id: '+snapshot.name()+'<br/>Title: '+snapshot.child('name').val()+'<br/>Length: '+snapshot.child('length').val()+'<br/>Thumbnail: '+snapshot.child('thumbnail').val()+'<br/>Num Views: '+snapshot.child('numViews').val()+'<br/>Priority: '+snapshot.getPriority()+'</div>');
-       //<img src="smiley.gif" alt="Smiley face" height="42" width="42">
-        if(first) {
-          first=false;
-          nextVideo();
-        }
-      });
-
-      firebase.on('child_moved', function(snapshot, prevChildName) {
-        //SWITCHES ORDER OF STUFF IN QUEUE
-        //prevChildName is the name of the previous one, snapshot.name is the id of the snapshot
-        if(prevChildName==null) {
-          $("#topQueue").after($("#"+snapshot.name()).remove());
-        } else {
-          $("#"+prevChildName).after($("#"+snapshot.name()).remove());
-        }
-      });
-
-      playerdb.on('child_changed', function(snapshot, prevChildName) {
-        if(isYoutube) {
-			player.setVolume(snapshot.val());
-		} else {
-			window.dancer.setVolume(snapshot.val()/100.0);
-		}
-      });
-      
-      commentDB.on('child_added', function(snapshot, prevChildName) {
-        //COMMENTS ADDED
-        //snapshot.val() is each comment
-        $("#comments").prepend("<p style=\"font-size:30px;line-height:normal;\">" + snapshot.val()+"</p>");
-      });
-    </script>
-
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
-        <script src="js/plugins.js"></script>
-        <script src="js/main.js"></script>
-
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-        <script>
-            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-            s.parentNode.insertBefore(g,s)}(document,'script'));
-        </script>
-		<div id="loading" style="display:none;">Loading . . .</div>
-		<!-- <canvas id="canv" height="300" width="500"></canvas> use this canvas if not 3d-->
-	
-		<script src="dancer.js-master/examples/lib/Three.js"></script>
-		<script src="dancer.js-master/examples/lib/Stats.js"></script>
-		<script src="dancer.js-master/examples/lib/Detector.js"></script>
-		<script src="dancer.js-master/examples/lib/threeFullScreen.js"></script>
-		
-
-		<script src="dancer.js-master/src/dancer.js"></script>
-		<script src="dancer.js-master/src/support.js"></script>
-		<script src="dancer.js-master/src/kick.js"></script>
-		<script src="dancer.js-master/src/adapterWebkit.js"></script>
-		<script src="dancer.js-master/src/adapterMoz.js"></script>
-		<script src="dancer.js-master/src/adapterFlash.js"></script>
-		<script src="dancer.js-master/lib/fft.js"></script>
-		<script src="dancer.js-master/lib/flash_detect.js"></script>
-	<!-- 	<script src="../../plugins/dancer.fft.js"></script> //include if using fft or both
-		<script src="../../plugins/dancer.waveform.js"></script>//include if using waveform or both
-	 -->	<!-- Demo stuff -->
-	 <!-- include scene and player if 3d blasting -->
-
-<!-- End of Copied code -->
-
-<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-</body>  
-</html>  
+		<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+		<script>
+			var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+			(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+			g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+			s.parentNode.insertBefore(g,s)}(document,'script'));
+		</script>
+		<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+	</body>
+</html>

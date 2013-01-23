@@ -12,31 +12,31 @@
 	$body = $_REQUEST['Body']; // gets the body of the message received
 	$number = $_REQUEST['From']; // gets the sender of the message received	
 	$isAdmin = false; //0 is not admin
-	$url = 'http://adr.aws.af.cm/';
+	$url = './';
 	
 	$counter = 1;	
 	//confirm user is admin
 	$number = substr($number, 1);	
 	if($number == "17145857755" || $number == "16572060254" || $number == "19494229778")
 	{
-		$isAdmin = true;			
+		$isAdmin = true;
 	}
 	
 	
-	//initiates counter to reflectnew session
+	//initiates counter to reflect new session
 	if(!strlen($counter))
 	{
 		$counter = 0;
 	}
 
+	//options
+	$text = "Text any of the following commands: 'add <SONG NAME>', 'karaoke <SONG NAME>', 'info' (get song information),";
+	$textA = "'queue' (see playlist queue), 'options' (list all commands), OR text us any comment you want";
+	$textB = "ADMIN OPTIONS: 'skip', '+' (to increase volume), '-' (to decrease volume), 'play', 'pause'";
+
 	//new session
 	if($counter == 0)
 	{
-		$text = "Text back any of the following commands: 'add <SONG NAME>', 'karaoke <SONG NAME>', 'info' (get song information),";
-		$textA = "'queue' (see playlist queue), 'options' (list all commands), OR text us how you feel about the song";		
-		$textB = "ADMIN OPTIONS: 'skip', '+' (to increase volume), '-' (to decrease volume)";
-	
-	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $textA);
 		if($isAdmin)
@@ -45,6 +45,7 @@
 		}
 		$counter++;
 	}
+	
 	//handle adding new songs
 	else if(strtolower(substr($body, 0, 3))=="add")
 	{
@@ -57,6 +58,7 @@
 
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
 	}
+	
 	//karaoke
 	else if(strtolower(substr($body, 0, 7))=="karaoke")
 	{
@@ -69,24 +71,14 @@
 
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
 	}
-	//visual
-	else if(strtolower(substr($body, 0, 6))=="visual")
-	{
-		//strip out important stuff from string
-		$song = substr($body, 7);
-
-		$responseName = file_get_contents($url."addSong.php?song=".urlencode($song)."&number=".urlencode($number)."&type=".urlencode("visualize"));
-		//send song request to backend
-		$text = $responseName . " has been added to the queue!";	
-
-		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
-	}
+	
 	//get info
 	else if(strtolower(substr($body, 0, 4))=="info")
 	{
 		$text = file_get_contents($url."getInfo.php");	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
 	}
+	
 	//get queue
 	else if(strtolower(substr($body, 0, 5))=="queue")
 	{
@@ -98,15 +90,12 @@
 		{		    
 		    $sms = $client->account->sms_messages->create("949-391-4022",$number, $convert[$i]);
 		}
-		//$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
+		//$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
+	
+	//options
 	else if(strtolower(substr($body, 0, 7))=="options")
 	{
-		$text = "Text back any of the following commands: 'add <SONG NAME>', 'karaoke <SONG NAME>', 'info' (get song information),";
-		$textA = "'queue' (see playlist queue), 'options' (list all commands), OR text us how you feel about the song";		
-		$textB = "ADMIN OPTIONS: 'skip', '+' (to increase volume), '-' (to decrease volume)";
-	
-	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $textA);
 		if($isAdmin)
@@ -114,34 +103,26 @@
 			$sms = $client->account->sms_messages->create("949-391-4022",$number, $textB);
 		}
 	}
-	else if(strtolower(substr($body, 0, 5))=="clear")
-	{
-		$counter = 0;
-		$text = "everything was cleared";	
-		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
-	}
-	else if(strtolower(substr($body, 0, 7))=="songbox")
-	{		
-		$text = "http://db.tt/3Vg4wCey";			
-		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
-	}
 
 	//ADMIN PANEL
-	//volume control ONLY FOR OWNER OF THE ROOM
+	
+	//skip
 	else if(strtolower(substr($body, 0, 4))=="skip" && $isAdmin)
 	{		
 		$text = "the current song was skipped";	
 		file_get_contents($url."skipSong.php");	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
-
+	
+	//increase volume
 	else if(strtolower(substr($body, 0, 1))=="+" && $isAdmin)
 	{
 		$text = "volume was increased";
-		file_get_contents($url."increaseVolume.php?val=20");			
-
+		file_get_contents($url."increaseVolume.php?val=20");
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
+	
+	//decrease volume
 	else if(strtolower(substr($body, 0, 1))=="-" && $isAdmin)
 	{
 		$text = "volume was decreased";	
@@ -149,6 +130,7 @@
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
 	
+	//play
 	else if(strtolower(substr($body, 0, 4))=="play" && $isAdmin)
 	{		
 		$text = "playing";	
@@ -156,13 +138,15 @@
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
 
+	//pause
 	else if(strtolower(substr($body, 0, 5))=="pause" && $isAdmin)
-	{		
-		$text = "paused";	
+	{
+		$text = "paused";
 		file_get_contents($url."playPause.php?which=pause");	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
 
+	//other comment
 	else
 	{		
 		$sentiment = file_get_contents($url."getSentiment.php?text=".urlencode($body));
@@ -172,12 +156,4 @@
 
 	//save session for future
 	$_SESSION['counter'] = $counter;
-
-
-	//sends text to user
-	/*$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);*/
-	
-	
-	
-	
 ?>
