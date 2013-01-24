@@ -48,13 +48,13 @@ function nextVideo() {
 			} else {
 				player.loadVideoById(songs[0], 5, "large");
 			}
-			if(player!=null) {
+			/*if(player!=null) {
 				playerdb.child('volume').once('value', function(dataSnapshot) {
 					player.setVolume(dataSnapshot.val());
 				});
 			} else {
 				console.log("SOMETHING WENT WRONG");
-			}
+			}*/
 			$("#visuals canvas").hide();
 			$("#"+songs[0]).remove();
 			songdb.child(songs[0]).remove();
