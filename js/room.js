@@ -41,10 +41,10 @@ function nextVideo() {
 						width: '640',
 						videoId: songs[0],
 				  playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50 },
-						events: {
+						/*events: {
 							'onStateChange': onPlayerStateChange,
 							'onError': onError
-						}});
+						}*/});
 			} else {
 				player.loadVideoById(songs[0], 5, "large");
 			}
