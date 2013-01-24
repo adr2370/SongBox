@@ -3,7 +3,7 @@ body {
 	font-style: oblique;
 	font-family: fantasy;
 	padding-bottom: 25px;
-	background: url(img/abcde.jpg) no-repeat center center fixed;
+	background: url(../img/abcde.jpg) no-repeat center center fixed;
 	background-size: cover;
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
