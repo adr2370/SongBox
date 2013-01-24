@@ -14,7 +14,7 @@ function setMeter(rating) {
 
 var first=true;
 var player;
-var firebase = new Firebase('https://adr2370.firebaseio.com/songs');
+var firebase = new Firebase('https://adr2370.firebaseio.com/');
 var songdb = firebase.child('songs');
 var playerdb = firebase.child('playerdb');
 var commentdb = firebase.child('comments');
