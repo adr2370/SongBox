@@ -12,7 +12,6 @@ function setMeter(rating) {
 	r.animate({width: (583-x)}, Math.abs(r.width()-(583-x)));
 }
 
-var first=true;
 var player;
 var firebase = new Firebase('https://adr2370.firebaseio.com/');
 var songdb = firebase.child('songs');
@@ -61,7 +60,6 @@ function nextVideo() {
 			songs.splice(0,1);
 		});
 	} else {
-		first=true;
 		$("#youtube").replaceWith($('<div id="youtube"><\/div>'));
 		player=null;
 	}
@@ -95,15 +93,24 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 	}
 });
 
+currentdb.on('child_added', function(snapshot, prevChildName) {
+	//ADDED SONG
+	songs.push(snapshot.name());
+	nextVideo();
+});
+
 songdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDS SOMETHING TO QUEUE
 	//snapshot.name() is youtube id, all else is below
 	songs.push(snapshot.name());
 	$("#queue").append('<tr style=\"font-size:30px;line-height:normal;\" id="'+snapshot.name()+'"><td style="line-height: normal;">'+snapshot.child('name').val()+'<\/td><td style="line-height: normal;">'+snapshot.child('length').val()+'<\/td><td><img src=\"'+snapshot.child('thumbnail').val()+'\" height="225" width=225"><\/td><td style="line-height: normal;">'+snapshot.child('numViews').val()+'<\/tr>');
-	if(first) {
-		first=false;
-		nextVideo();
-	}
+	currentdb.on('value', function(snapshot, prevChildName) {
+		if(snapshot.val()=="null") {
+			nextVideo();
+		} else {
+			console.log(snapshot.val());
+		}
+	});
 });
 
 songdb.on('child_moved', function(snapshot, prevChildName) {
