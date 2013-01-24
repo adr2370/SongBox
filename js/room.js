@@ -81,7 +81,7 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 		nextVideo();
 	} else if(snapshot.name()=="play"&&snapshot.val()==1) {   
 		currentdb.child('play').set(0);
-		player.playVideo();=
+		player.playVideo();
 	} else if(snapshot.name()=="pause"&&snapshot.val()==1) {  
 		currentdb.child('pause').set(0);
 		player.pauseVideo();
