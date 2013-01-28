@@ -58,6 +58,7 @@ function nextVideo() {
 	commentdb.remove();
 	currentdb.remove();
 	if(songs.length>0) {  
+		console.log("hello");
 		songdb.child(songs[0]).once('value', function(dataSnapshot) {
 			currentdb.set(dataSnapshot.val());
 			currentdb.child('rating').set(0);
@@ -69,6 +70,7 @@ function nextVideo() {
 			console.log(dataSnapshot.val());
 		});
 	} else {
+		console.log("goodbye");
 		$("#youtube").replaceWith($('<div id="youtube"><\/div>'));
 		player=null;
 	}
