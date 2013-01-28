@@ -23,34 +23,32 @@ var songs=new Array();
 
 function startVideo() {
 	//youtube video
-	console.log("startVideo");
 	currentdb.once('value', function(dataSnapshot) {
 		var id=dataSnapshot.child('id').val();
-		console.log(id);
 		if(player==null) {
 			player=new YT.Player('youtube', {
 					height: '390',
 					width: '640',
-					videoId: songs[0],
+					videoId: id,
 			  playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50 },
 					events: {
 						'onStateChange': onPlayerStateChange,
 						//'onError': onError
 					}});
 		} else {
-			player.loadVideoById(songs[0], 5, "large");
+			player.loadVideoById(id, 5, "large");
 		}
-		if(player!=null) {
+		/*if(player!=null) {
 			playerdb.child('volume').once('value', function(dataSnapshot) {
 				player.setVolume(dataSnapshot.val());
 			});
 		} else {
 			console.log("SOMETHING WENT WRONG");
-		}
+		}*/
 		$("#visuals canvas").hide();
-		$("#"+songs[0]).remove();
-		songdb.child(songs[0]).remove();
-		songs.splice(0,1);
+		$("#"+id).remove();
+		songdb.child(id).remove();
+		//songs.splice(0,1);
 	});
 }
 
