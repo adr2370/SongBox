@@ -58,6 +58,7 @@ function nextVideo() {
 	setMeter(0);
 	$("#comments").html("");
 	commentdb.remove();
+	currentdb.remove();
 	console.log("nextVideo");
 	if(songs.length>0) {  
 		songdb.child(songs[0]).once('value', function(dataSnapshot) {
@@ -107,7 +108,7 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 currentdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDED SONG
 	//songs.unshift(snapshot.name());
-	startVideo();
+	//startVideo();
 });
 
 songdb.on('child_added', function(snapshot, prevChildName) {
