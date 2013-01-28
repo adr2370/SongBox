@@ -33,6 +33,7 @@ function nextVideo() {
 			currentdb.child('play').set(0);
 			currentdb.child('pause').set(0);
 			currentdb.child('fullScreen').set(0);
+			currentdb.child('id').set(songs[0]);
 			//youtube video
 			if(player==null) {
 				player=new YT.Player('youtube', {
@@ -61,6 +62,7 @@ function nextVideo() {
 		});
 	} else {
 		$("#youtube").replaceWith($('<div id="youtube"><\/div>'));
+		currentdb.remove();
 		player=null;
 	}
 }
@@ -105,7 +107,7 @@ songdb.on('child_added', function(snapshot, prevChildName) {
 	songs.push(snapshot.name());
 	$("#queue").append('<tr style=\"font-size:30px;line-height:normal;\" id="'+snapshot.name()+'"><td style="line-height: normal;">'+snapshot.child('name').val()+'<\/td><td style="line-height: normal;">'+snapshot.child('length').val()+'<\/td><td><img src=\"'+snapshot.child('thumbnail').val()+'\" height="225" width=225"><\/td><td style="line-height: normal;">'+snapshot.child('numViews').val()+'<\/tr>');
 	currentdb.on('value', function(snapshot, prevChildName) {
-		if(snapshot.val()=="null") {
+		if(snapshot.val()==null) {
 			nextVideo();
 		} else {
 			console.log(snapshot.val());
