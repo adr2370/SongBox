@@ -12,7 +12,7 @@
 	$body = $_REQUEST['Body']; // gets the body of the message received
 	$number = $_REQUEST['From']; // gets the sender of the message received	
 	$isAdmin = false; //0 is not admin
-	$url = './';
+	$url = 'http://songbox.co/twilioStuff/';
 	
 	$counter = 1;	
 	//confirm user is admin
