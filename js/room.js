@@ -50,7 +50,7 @@ function startVideo() {
 		$("#"+songs[0]).remove();
 		songdb.child(songs[0]).remove();
 		songs.splice(0,1);
-	});
+	}
 }
 
 function nextVideo() {
