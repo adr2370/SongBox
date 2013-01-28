@@ -77,12 +77,12 @@ function nextVideo() {
 
 function onPlayerStateChange(event) {        
 	if(event.data == 0) {
-		nextVideo();
+		currentdb.remove();
 	}
 }
 
 function onError(event) {
-	nextVideo();
+	currentdb.remove();
 }
 
 currentdb.on('child_changed', function(snapshot, prevChildName) {
