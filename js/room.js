@@ -91,7 +91,7 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 	if(snapshot.name()=="rating") {
 		setMeter(snapshot.val());
 	} else if(snapshot.name()=="skip"&&snapshot.val()==1) {
-		nextVideo();
+		//nextVideo();
 	} else if(snapshot.name()=="play"&&snapshot.val()==1) {   
 		currentdb.child('play').set(0);
 		player.playVideo();
@@ -116,7 +116,7 @@ currentdb.on('child_removed', function(snapshot, prevChildName) {
 	//ADDED SONG
 	//songs.unshift(snapshot.name());
 	if(snapshot.name()=="id") {
-		nextVideo();
+		//nextVideo();
 	}
 });
 
@@ -127,7 +127,7 @@ songdb.on('child_added', function(snapshot, prevChildName) {
 	$("#queue").append('<tr style=\"font-size:30px;line-height:normal;\" id="'+snapshot.name()+'"><td style="line-height: normal;">'+snapshot.child('name').val()+'<\/td><td style="line-height: normal;">'+snapshot.child('length').val()+'<\/td><td><img src=\"'+snapshot.child('thumbnail').val()+'\" height="225" width=225"><\/td><td style="line-height: normal;">'+snapshot.child('numViews').val()+'<\/tr>');
 	currentdb.on('value', function(snapshot, prevChildName) {
 		if(snapshot.val()==null) {
-			nextVideo();
+			//nextVideo();
 		}
 	});
 });
