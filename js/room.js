@@ -111,6 +111,14 @@ currentdb.on('child_added', function(snapshot, prevChildName) {
 	}
 });
 
+currentdb.on('child_removed', function(snapshot, prevChildName) {
+	//ADDED SONG
+	//songs.unshift(snapshot.name());
+	if(snapshot.name()=="id") {
+		nextVideo();
+	}
+});
+
 songdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDS SOMETHING TO QUEUE
 	//snapshot.name() is youtube id, all else is below
