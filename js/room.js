@@ -133,6 +133,7 @@ function onPlayerStateChange(event) {
 		});
 	} else if(event.data == 2) {
 		currentdb.child('play').set(2);
+		currentdb.child('time').set(0);
 	}
 }
 
