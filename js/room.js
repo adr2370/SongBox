@@ -120,6 +120,7 @@ function nextVideo() {
 		});
 	} else {
 		$("#youtube").replaceWith($('<div id="youtube"><\/div>'));
+		currentdb.remove();
 		player=null;
 	}
 }
