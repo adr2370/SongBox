@@ -8,7 +8,7 @@ var currentdb = firebase.child('current');
 var songs=new Array();
 
 window.setInterval(function(){
-	if(player!=null) {
+	if(player!=null&&player.getPlayerState()==1) {
 		currentdb.child('time').once('value', function(dataSnapshot) {
 			if(dataSnapshot.val()<player.getCurrentTime()) {
 				currentdb.child('time').set(player.getCurrentTime());
