@@ -106,7 +106,7 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 
 currentdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDED SONG
-	//songs.unshift(snapshot.name());
+	console.log(snapshot.name());
 	if(snapshot.name()=="id") {
 		startVideo();
 	}
@@ -114,7 +114,6 @@ currentdb.on('child_added', function(snapshot, prevChildName) {
 
 currentdb.on('child_removed', function(snapshot, prevChildName) {
 	//ADDED SONG
-	//songs.unshift(snapshot.name());
 	if(snapshot.name()=="id") {
 		//nextVideo();
 	}
