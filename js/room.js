@@ -24,10 +24,8 @@ var songs=new Array();
 
 function startVideo() {
 	//youtube video
-	console.log("STARTING VIDEO");
 	currentdb.once('value', function(dataSnapshot) {
 		var id=dataSnapshot.child('id').val();
-		console.log(id);
 		if(player==null) {
 			player=new YT.Player('youtube', {
 				height: '390',
@@ -56,20 +54,23 @@ function startVideo() {
 }
 
 function nextVideo() {
+	goingToNext=true;
 	setMeter(0);
 	$("#comments").html("");
 	commentdb.remove();
 	currentdb.remove();
 	if(songs.length>0) {  
 		songdb.child(songs[0]).once('value', function(dataSnapshot) {
-			currentdb.set(dataSnapshot.val());
-			currentdb.child('rating').set(0);
-			currentdb.child('skip').set(0);
-			currentdb.child('play').set(0);
-			currentdb.child('pause').set(0);
-			currentdb.child('fullScreen').set(0);
-			currentdb.child('id').set(songs[0]);
-			goingToNext=false;
+			if(goingToNext) {
+				currentdb.set(dataSnapshot.val());
+				currentdb.child('rating').set(0);
+				currentdb.child('skip').set(0);
+				currentdb.child('play').set(0);
+				currentdb.child('pause').set(0);
+				currentdb.child('fullScreen').set(0);
+				currentdb.child('id').set(songs[0]);
+				goingToNext=false;
+			}
 		});
 	} else {
 		$("#youtube").replaceWith($('<div id="youtube"><\/div>'));
@@ -109,8 +110,7 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 currentdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDED SONG
 	if(snapshot.name()=="id") {
-		console.log(snapshot.name());
-		//startVideo();
+		startVideo();
 	}
 });
 
@@ -127,8 +127,7 @@ songdb.on('child_added', function(snapshot, prevChildName) {
 	songs.push(snapshot.name());
 	$("#queue").append('<tr style=\"font-size:30px;line-height:normal;\" id="'+snapshot.name()+'"><td style="line-height: normal;">'+snapshot.child('name').val()+'<\/td><td style="line-height: normal;">'+snapshot.child('length').val()+'<\/td><td><img src=\"'+snapshot.child('thumbnail').val()+'\" height="225" width=225"><\/td><td style="line-height: normal;">'+snapshot.child('numViews').val()+'<\/tr>');
 	currentdb.on('value', function(snapshot, prevChildName) {
-		if(snapshot.val()==null&&!goingToNext) {
-			goingToNext=true;
+		if(snapshot.val()==null) {
 			nextVideo();
 		}
 	});
