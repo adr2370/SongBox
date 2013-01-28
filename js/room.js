@@ -91,7 +91,7 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 		setMeter(snapshot.val());
 	} else if(snapshot.name()=="skip"&&snapshot.val()==1) {
 		nextVideo();
-	} else if(snapshot.name()=="play"&&snapshot.val()==1) {   
+	} else if(snapshot.name()=="play") {   
 		if(snapshot.val()==1) {
 			player.playVideo();
 		} else if(snapshot.val()==2) {
