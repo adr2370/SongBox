@@ -75,7 +75,7 @@ function nextVideo() {
 			player=null;
 			//goingToNext=false;
 		}
-	}
+	//}
 }
 
 function onPlayerStateChange(event) {        
