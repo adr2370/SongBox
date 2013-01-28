@@ -66,6 +66,7 @@ function nextVideo() {
 			currentdb.child('pause').set(0);
 			currentdb.child('fullScreen').set(0);
 			currentdb.child('id').set(songs[0]);
+			console.log('value');
 		});
 	} else {
 		$("#youtube").replaceWith($('<div id="youtube"><\/div>'));
