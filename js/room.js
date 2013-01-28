@@ -19,6 +19,7 @@ var playerdb = firebase.child('playerdb');
 var commentdb = firebase.child('comments');
 var currentdb = firebase.child('current');
 var goingToNext = false;
+var startingVideo = false;
 
 var songs=new Array();
 
@@ -52,6 +53,7 @@ function startVideo() {
 		$("#"+id).remove();
 		songdb.child(id).remove();
 		removeA(songs, id);
+		startingVideo=false;
 	});
 }
 
@@ -112,7 +114,8 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 currentdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDED SONG
 	console.log(snapshot.name());
-	if(snapshot.name()=="id") {
+	if(snapshot.name()=="id"&&!startingVideo) {
+		startingVideo=true;
 		console.log("STARTING");
 		startVideo();
 	}
