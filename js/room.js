@@ -12,7 +12,7 @@ window.setInterval(function(){
 		currentdb.child('time').once('value', function(dataSnapshot) {
 			if(dataSnapshot.val()<player.getCurrentTime()) {
 				currentdb.child('time').set(player.getCurrentTime());
-			} else if(Math.abs(dataSnapshot.val()-player.getCurrentTime())>0.01){
+			} else if(Math.abs(dataSnapshot.val()-player.getCurrentTime())>0.10){
 				player.seekTo(dataSnapshot.val(),true);
 			}
 		});
