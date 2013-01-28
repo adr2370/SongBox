@@ -54,14 +54,14 @@ function startVideo() {
 }
 
 function nextVideo() {
-	goingToNext=true;
-	setMeter(0);
-	$("#comments").html("");
-	commentdb.remove();
-	currentdb.remove();
-	if(songs.length>0) {  
-		songdb.child(songs[0]).once('value', function(dataSnapshot) {
-			if(goingToNext) {
+	if(!goingToNext) {
+		goingToNext=true;
+		setMeter(0);
+		$("#comments").html("");
+		commentdb.remove();
+		currentdb.remove();
+		if(songs.length>0) {  
+			songdb.child(songs[0]).once('value', function(dataSnapshot) {
 				currentdb.set(dataSnapshot.val());
 				currentdb.child('rating').set(0);
 				currentdb.child('skip').set(0);
@@ -70,12 +70,12 @@ function nextVideo() {
 				currentdb.child('fullScreen').set(0);
 				currentdb.child('id').set(songs[0]);
 				goingToNext=false;
-			}
-		});
-	} else {
-		$("#youtube").replaceWith($('<div id="youtube"><\/div>'));
-		player=null;
-		goingToNext=false;
+			});
+		} else {
+			$("#youtube").replaceWith($('<div id="youtube"><\/div>'));
+			player=null;
+			goingToNext=false;
+		}
 	}
 }
 
