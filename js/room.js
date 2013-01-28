@@ -57,7 +57,6 @@ function nextVideo() {
 	$("#comments").html("");
 	commentdb.remove();
 	currentdb.remove();
-	console.log("nextVideo");
 	if(songs.length>0) {  
 		songdb.child(songs[0]).once('value', function(dataSnapshot) {
 			currentdb.set(dataSnapshot.val());
@@ -67,10 +66,10 @@ function nextVideo() {
 			currentdb.child('pause').set(0);
 			currentdb.child('fullScreen').set(0);
 			currentdb.child('id').set(songs[0]);
+			console.log(dataSnapshot.val());
 		});
 	} else {
 		$("#youtube").replaceWith($('<div id="youtube"><\/div>'));
-		currentdb.remove();
 		player=null;
 	}
 }
