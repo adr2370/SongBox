@@ -59,7 +59,7 @@ function nextVideo() {
 		setMeter(0);
 		$("#comments").html("");
 		commentdb.remove();
-		currentdb.remove();
+		//currentdb.remove();
 		if(songs.length>0) {  
 			songdb.child(songs[0]).once('value', function(dataSnapshot) {
 				currentdb.set(dataSnapshot.val());
