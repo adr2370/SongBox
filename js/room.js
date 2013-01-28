@@ -24,8 +24,10 @@ var songs=new Array();
 
 function startVideo() {
 	//youtube video
+	console.log("STARTING VIDEO");
 	currentdb.once('value', function(dataSnapshot) {
 		var id=dataSnapshot.child('id').val();
+		console.log(id);
 		if(player==null) {
 			player=new YT.Player('youtube', {
 				height: '390',
@@ -89,9 +91,6 @@ function onError(event) {
 currentdb.on('child_changed', function(snapshot, prevChildName) {
 	console.log(snapshot.name());
 	//CHANGE RATING OR SKIP VIDEO
-	if(snapshot.name()=="id") {
-		startVideo();
-	}
 	if(snapshot.name()=="rating") {
 		setMeter(snapshot.val());
 	} else if(snapshot.name()=="skip"&&snapshot.val()==1) {
@@ -105,6 +104,8 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 	} else if(snapshot.name()=="fullScreen"&&snapshot.val()==1) {    
 		currentdb.child('fullScreen').set(0);
 		window.fullScreen();
+	} else if(snapshot.name()=="id") {
+		startVideo();
 	}
 });
 
@@ -112,6 +113,7 @@ currentdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDED SONG
 	console.log(snapshot.name());
 	if(snapshot.name()=="id") {
+		console.log("STARTING");
 		startVideo();
 	}
 });
