@@ -18,6 +18,7 @@ var songdb = firebase.child('songs');
 var playerdb = firebase.child('playerdb');
 var commentdb = firebase.child('comments');
 var currentdb = firebase.child('current');
+var goingToNext = false;
 
 var songs=new Array();
 
@@ -58,7 +59,6 @@ function nextVideo() {
 	commentdb.remove();
 	currentdb.remove();
 	if(songs.length>0) {  
-		console.log("hello");
 		songdb.child(songs[0]).once('value', function(dataSnapshot) {
 			currentdb.set(dataSnapshot.val());
 			currentdb.child('rating').set(0);
@@ -67,12 +67,12 @@ function nextVideo() {
 			currentdb.child('pause').set(0);
 			currentdb.child('fullScreen').set(0);
 			currentdb.child('id').set(songs[0]);
-			console.log(dataSnapshot.val());
+			goingToNext=false;
 		});
 	} else {
-		console.log("goodbye");
 		$("#youtube").replaceWith($('<div id="youtube"><\/div>'));
 		player=null;
+		goingToNext=false;
 	}
 }
 
@@ -126,7 +126,8 @@ songdb.on('child_added', function(snapshot, prevChildName) {
 	songs.push(snapshot.name());
 	$("#queue").append('<tr style=\"font-size:30px;line-height:normal;\" id="'+snapshot.name()+'"><td style="line-height: normal;">'+snapshot.child('name').val()+'<\/td><td style="line-height: normal;">'+snapshot.child('length').val()+'<\/td><td><img src=\"'+snapshot.child('thumbnail').val()+'\" height="225" width=225"><\/td><td style="line-height: normal;">'+snapshot.child('numViews').val()+'<\/tr>');
 	currentdb.on('value', function(snapshot, prevChildName) {
-		if(snapshot.val()==null) {
+		if(snapshot.val()==null&&!goingToNext) {
+			goingToNext=true;
 			nextVideo();
 		}
 	});
