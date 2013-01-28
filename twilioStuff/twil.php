@@ -1,5 +1,5 @@
 <?php
-	require "Services/Twilio.php"; // for Twilio REST API
+	require "../Services/Twilio.php"; // for Twilio REST API
 
 	session_start(); // start session for Twilio SMS response 
 
