@@ -1,0 +1,31 @@
+body, html
+{
+	background-color: #666666;
+	height:100%;
+	text-align:center;
+	background: url(../../img/abcde.jpg) no-repeat center center fixed;
+	background-size: cover;
+	-webkit-border-radius: 6px;  
+	-moz-border-radius: 6px;  
+	border-radius: 6px;   
+
+}
+#header
+{
+    width: 800px;
+    height: 65%;
+    margin: 0px auto;
+    padding: 30px 30px 30px 30px;
+    position: relative;
+    top: 100px;
+}
+
+.phoneNum
+{
+    width: 310px;
+    margin: auto;
+	height: 30%;
+	margin-top: 0px;
+    position: relative;
+	padding: 30px 30px 30px 30px;
+}
