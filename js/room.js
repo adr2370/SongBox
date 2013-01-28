@@ -19,7 +19,6 @@ var playerdb = firebase.child('playerdb');
 var commentdb = firebase.child('comments');
 var currentdb = firebase.child('current');
 var goingToNext = false;
-var startingVideo = false;
 
 var songs=new Array();
 
@@ -53,7 +52,6 @@ function startVideo() {
 		$("#"+id).remove();
 		songdb.child(id).remove();
 		removeA(songs, id);
-		startingVideo=false;
 	});
 }
 
@@ -106,16 +104,13 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 	} else if(snapshot.name()=="fullScreen"&&snapshot.val()==1) {    
 		currentdb.child('fullScreen').set(0);
 		window.fullScreen();
-	} else if(snapshot.name()=="id") {
-		startVideo();
 	}
 });
 
 currentdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDED SONG
 	console.log(snapshot.name());
-	if(snapshot.name()=="id"&&!startingVideo) {
-		startingVideo=true;
+	if(snapshot.name()=="id") {
 		console.log("STARTING");
 		startVideo();
 	}
