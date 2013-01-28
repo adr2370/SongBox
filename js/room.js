@@ -23,6 +23,7 @@ var songs=new Array();
 
 function startVideo() {
 	//youtube video
+	console.log("startVideo");
 	currentdb.once('value', function(dataSnapshot) {
 		var id=dataSnapshot.child('id').val();
 		console.log(id);
@@ -57,6 +58,7 @@ function nextVideo() {
 	setMeter(0);
 	$("#comments").html("");
 	commentdb.remove();
+	console.log("nextVideo");
 	if(songs.length>0) {  
 		songdb.child(songs[0]).once('value', function(dataSnapshot) {
 			currentdb.set(dataSnapshot.val());
@@ -66,7 +68,6 @@ function nextVideo() {
 			currentdb.child('pause').set(0);
 			currentdb.child('fullScreen').set(0);
 			currentdb.child('id').set(songs[0]);
-			console.log('value');
 		});
 	} else {
 		$("#youtube").replaceWith($('<div id="youtube"><\/div>'));
