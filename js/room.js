@@ -62,7 +62,6 @@ function nextVideo() {
 			currentdb.child('rating').set(0);
 			currentdb.child('skip').set(0);
 			currentdb.child('play').set(0);
-			currentdb.child('pause').set(0);
 			currentdb.child('fullScreen').set(0);
 			currentdb.child('id').set(songs[0]);
 		});
@@ -75,6 +74,10 @@ function nextVideo() {
 function onPlayerStateChange(event) {        
 	if(event.data == 0) {
 		nextVideo();
+	} else if(event.data == 1) {
+		currentdb.child('play').set(1);
+	} else if(event.data == 2) {
+		currentdb.child('play').set(2);
 	}
 }
 
@@ -89,11 +92,11 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 	} else if(snapshot.name()=="skip"&&snapshot.val()==1) {
 		nextVideo();
 	} else if(snapshot.name()=="play"&&snapshot.val()==1) {   
-		currentdb.child('play').set(0);
-		player.playVideo();
-	} else if(snapshot.name()=="pause"&&snapshot.val()==1) {  
-		currentdb.child('pause').set(0);
-		player.pauseVideo();
+		if(snapshot.val()==1) {
+			player.playVideo();
+		} else if(snapshot.val()==2) {
+			player.pauseVideo();
+		}
 	} else if(snapshot.name()=="fullScreen"&&snapshot.val()==1) {    
 		currentdb.child('fullScreen').set(0);
 		window.fullScreen();
