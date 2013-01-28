@@ -95,11 +95,11 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 	}
 });
 
-currentdb.on('child_added', function(snapshot, prevChildName) {
+/*currentdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDED SONG
-	songs.unshift(snapshot.name());
+	songs.push(snapshot.name());
 	nextVideo();
-});
+});*/
 
 songdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDS SOMETHING TO QUEUE
@@ -109,6 +109,8 @@ songdb.on('child_added', function(snapshot, prevChildName) {
 	currentdb.on('value', function(snapshot, prevChildName) {
 		if(snapshot.val()==null) {
 			nextVideo();
+		} else {
+			console.log(snapshot.val());
 		}
 	});
 });
