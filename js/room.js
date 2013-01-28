@@ -89,7 +89,7 @@ function startVideo() {
 				height: '390',
 				width: '640',
 				videoId: id,
-				playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50 },
+				playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50, start:0 },
 				events: {
 					'onStateChange': onPlayerStateChange,
 					//'onError': onError
