@@ -21,6 +21,38 @@ var currentdb = firebase.child('current');
 
 var songs=new Array();
 
+function startVideo() {
+	//youtube video
+	currentdb.once('value', function(dataSnapshot) {
+		var id=dataSnapshot.child('id').val();
+		console.log(id);
+		if(player==null) {
+			player=new YT.Player('youtube', {
+					height: '390',
+					width: '640',
+					videoId: songs[0],
+			  playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50 },
+					events: {
+						'onStateChange': onPlayerStateChange,
+						//'onError': onError
+					}});
+		} else {
+			player.loadVideoById(songs[0], 5, "large");
+		}
+		if(player!=null) {
+			playerdb.child('volume').once('value', function(dataSnapshot) {
+				player.setVolume(dataSnapshot.val());
+			});
+		} else {
+			console.log("SOMETHING WENT WRONG");
+		}
+		$("#visuals canvas").hide();
+		$("#"+songs[0]).remove();
+		songdb.child(songs[0]).remove();
+		songs.splice(0,1);
+	}
+}
+
 function nextVideo() {
 	setMeter(0);
 	$("#comments").html("");
@@ -34,31 +66,6 @@ function nextVideo() {
 			currentdb.child('pause').set(0);
 			currentdb.child('fullScreen').set(0);
 			currentdb.child('id').set(songs[0]);
-			//youtube video
-			if(player==null) {
-				player=new YT.Player('youtube', {
-						height: '390',
-						width: '640',
-						videoId: songs[0],
-				  playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50 },
-						events: {
-							'onStateChange': onPlayerStateChange,
-							//'onError': onError
-						}});
-			} else {
-				player.loadVideoById(songs[0], 5, "large");
-			}
-			if(player!=null) {
-				playerdb.child('volume').once('value', function(dataSnapshot) {
-					player.setVolume(dataSnapshot.val());
-				});
-			} else {
-				console.log("SOMETHING WENT WRONG");
-			}
-			$("#visuals canvas").hide();
-			$("#"+songs[0]).remove();
-			songdb.child(songs[0]).remove();
-			songs.splice(0,1);
 		});
 	} else {
 		$("#youtube").replaceWith($('<div id="youtube"><\/div>'));
@@ -97,10 +104,8 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 
 currentdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDED SONG
-	if(player==null) {
-		songs.unshift(snapshot.name());
-		nextVideo();
-	}
+	//songs.unshift(snapshot.name());
+	startVideo();
 });
 
 songdb.on('child_added', function(snapshot, prevChildName) {
