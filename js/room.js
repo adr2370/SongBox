@@ -139,11 +139,6 @@ function onPlayerStateChange(event) {
 		playerdb.child('volume').once('value', function(dataSnapshot) {
 			player.setVolume(dataSnapshot.val());
 		});
-		currentdb.child('play').once('value', function(dataSnapshot) {
-			if(dataSnapshot.val()==2) {
-				player.pauseVideo();
-			}
-		});
 	} else if(event.data == 2) {
 		currentdb.child('play').set(2);
 		//currentdb.child('time').set(0);
