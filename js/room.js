@@ -12,6 +12,7 @@ function setMeter(rating) {
 	r.animate({width: (583-x)}, Math.abs(r.width()-(583-x)));
 }
 
+var first=true;
 var player;
 var firebase = new Firebase('https://adr2370.firebaseio.com/');
 var songdb = firebase.child('songs');
@@ -20,38 +21,6 @@ var commentdb = firebase.child('comments');
 var currentdb = firebase.child('current');
 
 var songs=new Array();
-
-function startVideo() {
-	//youtube video
-	currentdb.once('value', function(dataSnapshot) {
-		var id=dataSnapshot.child('id').val();
-		console.log(id);
-		if(player==null) {
-			player=new YT.Player('youtube', {
-					height: '390',
-					width: '640',
-					videoId: songs[0],
-			  playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50 },
-					events: {
-						'onStateChange': onPlayerStateChange,
-						//'onError': onError
-					}});
-		} else {
-			player.loadVideoById(songs[0], 5, "large");
-		}
-		if(player!=null) {
-			playerdb.child('volume').once('value', function(dataSnapshot) {
-				player.setVolume(dataSnapshot.val());
-			});
-		} else {
-			console.log("SOMETHING WENT WRONG");
-		}
-		$("#visuals canvas").hide();
-		$("#"+songs[0]).remove();
-		songdb.child(songs[0]).remove();
-		songs.splice(0,1);
-	});
-}
 
 function nextVideo() {
 	setMeter(0);
@@ -65,11 +34,35 @@ function nextVideo() {
 			currentdb.child('play').set(0);
 			currentdb.child('pause').set(0);
 			currentdb.child('fullScreen').set(0);
-			currentdb.child('id').set(songs[0]);
+			//youtube video
+			if(player==null) {
+				player=new YT.Player('youtube', {
+						height: '390',
+						width: '640',
+						videoId: songs[0],
+				  playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50 },
+						events: {
+							'onStateChange': onPlayerStateChange,
+							//'onError': onError
+						}});
+			} else {
+				player.loadVideoById(songs[0], 5, "large");
+			}
+			if(player!=null) {
+				playerdb.child('volume').once('value', function(dataSnapshot) {
+					player.setVolume(dataSnapshot.val());
+				});
+			} else {
+				console.log("SOMETHING WENT WRONG");
+			}
+			$("#visuals canvas").hide();
+			$("#"+songs[0]).remove();
+			songdb.child(songs[0]).remove();
+			songs.splice(0,1);
 		});
 	} else {
+		first=true;
 		$("#youtube").replaceWith($('<div id="youtube"><\/div>'));
-		currentdb.remove();
 		player=null;
 	}
 }
@@ -102,22 +95,15 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 	}
 });
 
-currentdb.on('child_added', function(snapshot, prevChildName) {
-	//ADDED SONG
-	//songs.unshift(snapshot.name());
-	startVideo();
-});
-
 songdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDS SOMETHING TO QUEUE
 	//snapshot.name() is youtube id, all else is below
 	songs.push(snapshot.name());
 	$("#queue").append('<tr style=\"font-size:30px;line-height:normal;\" id="'+snapshot.name()+'"><td style="line-height: normal;">'+snapshot.child('name').val()+'<\/td><td style="line-height: normal;">'+snapshot.child('length').val()+'<\/td><td><img src=\"'+snapshot.child('thumbnail').val()+'\" height="225" width=225"><\/td><td style="line-height: normal;">'+snapshot.child('numViews').val()+'<\/tr>');
-	currentdb.on('value', function(snapshot, prevChildName) {
-		if(snapshot.val()==null) {
-			nextVideo();
-		}
-	});
+	if(first) {
+		first=false;
+		nextVideo();
+	}
 });
 
 songdb.on('child_moved', function(snapshot, prevChildName) {
