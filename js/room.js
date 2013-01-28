@@ -18,7 +18,6 @@ var songdb = firebase.child('songs');
 var playerdb = firebase.child('playerdb');
 var commentdb = firebase.child('comments');
 var currentdb = firebase.child('current');
-var goingToNext = false;
 
 var songs=new Array();
 
@@ -54,38 +53,33 @@ function startVideo() {
 }
 
 function nextVideo() {
-	//if(!goingToNext) {
-	//	goingToNext=true;
-		setMeter(0);
-		$("#comments").html("");
-		commentdb.remove();
-		if(songs.length>0) {  
-			songdb.child(songs[0]).once('value', function(dataSnapshot) {
-				currentdb.set(dataSnapshot.val());
-				currentdb.child('rating').set(0);
-				currentdb.child('skip').set(0);
-				currentdb.child('play').set(0);
-				currentdb.child('pause').set(0);
-				currentdb.child('fullScreen').set(0);
-				currentdb.child('id').set(songs[0]);
-				//goingToNext=false;
-			});
-		} else {
-			$("#youtube").replaceWith($('<div id="youtube"><\/div>'));
-			player=null;
-			//goingToNext=false;
-		}
-	//}
+	setMeter(0);
+	$("#comments").html("");
+	commentdb.remove();
+	if(songs.length>0) {  
+		songdb.child(songs[0]).once('value', function(dataSnapshot) {
+			currentdb.set(dataSnapshot.val());
+			currentdb.child('rating').set(0);
+			currentdb.child('skip').set(0);
+			currentdb.child('play').set(0);
+			currentdb.child('pause').set(0);
+			currentdb.child('fullScreen').set(0);
+			currentdb.child('id').set(songs[0]);
+		});
+	} else {
+		$("#youtube").replaceWith($('<div id="youtube"><\/div>'));
+		player=null;
+	}
 }
 
 function onPlayerStateChange(event) {        
 	if(event.data == 0) {
-		currentdb.remove();
+		nextVideo();
 	}
 }
 
 function onError(event) {
-	currentdb.remove();
+	nextVideo();
 }
 
 currentdb.on('child_changed', function(snapshot, prevChildName) {
@@ -110,13 +104,6 @@ currentdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDED SONG
 	if(snapshot.name()=="id") {
 		startVideo();
-	}
-});
-
-currentdb.on('child_removed', function(snapshot, prevChildName) {
-	//ADDED SONG
-	if(snapshot.name()=="id") {
-		//nextVideo();
 	}
 });
 
