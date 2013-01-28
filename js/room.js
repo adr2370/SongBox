@@ -89,7 +89,6 @@ function onError(event) {
 }
 
 currentdb.on('child_changed', function(snapshot, prevChildName) {
-	console.log(snapshot.name());
 	//CHANGE RATING OR SKIP VIDEO
 	if(snapshot.name()=="rating") {
 		setMeter(snapshot.val());
@@ -109,10 +108,9 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 
 currentdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDED SONG
-	console.log(snapshot.name());
 	if(snapshot.name()=="id") {
-		console.log("STARTING");
-		startVideo();
+		console.log(snapshot.name());
+		//startVideo();
 	}
 });
 
