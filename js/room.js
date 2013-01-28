@@ -93,11 +93,11 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 	}
 });
 
-currentdb.on('child_added', function(snapshot, prevChildName) {
+/*currentdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDED SONG
 	songs.push(snapshot.name());
 	nextVideo();
-});
+});*/
 
 songdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDS SOMETHING TO QUEUE
