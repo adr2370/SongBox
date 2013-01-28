@@ -128,7 +128,6 @@ function onPlayerStateChange(event) {
 	if(event.data == 0) {
 		nextVideo();
 	} else if(event.data == 1) {
-		currentdb.child('play').set(1);
 		currentdb.child('time').once('value', function(dataSnapshot) {
 			if(dataSnapshot.val()<player.getCurrentTime()) {
 				currentdb.child('time').set(player.getCurrentTime());
@@ -142,6 +141,8 @@ function onPlayerStateChange(event) {
 		currentdb.child('play').once('value', function(dataSnapshot) {
 			if(dataSnapshot.val()==2) {
 				player.pauseVideo();
+			} else {
+				currentdb.child('play').set(1);
 			}
 		});
 	} else if(event.data == 2) {
