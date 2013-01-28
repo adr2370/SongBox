@@ -97,13 +97,6 @@ function startVideo() {
 		} else {
 			player.loadVideoById(id, 5, "large");
 		}
-		currentdb.child('play').once('value', function(dataSnapshot) {
-			if(dataSnapshot.val()==2) {
-				player.pauseVideo();
-			} else {
-				currentdb.child('play').set(1);
-			}
-		});
 		$("#visuals canvas").hide();
 		$("#"+id).remove();
 		songdb.child(id).remove();
@@ -144,6 +137,13 @@ function onPlayerStateChange(event) {
 		});
 		playerdb.child('volume').once('value', function(dataSnapshot) {
 			player.setVolume(dataSnapshot.val());
+		});
+		currentdb.child('play').once('value', function(dataSnapshot) {
+			if(dataSnapshot.val()==2) {
+				player.pauseVideo();
+			} else {
+				currentdb.child('play').set(1);
+			}
 		});
 	} else if(event.data == 2) {
 		currentdb.child('play').set(2);
