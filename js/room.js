@@ -28,14 +28,14 @@ function startVideo() {
 		var id=dataSnapshot.child('id').val();
 		if(player==null) {
 			player=new YT.Player('youtube', {
-					height: '390',
-					width: '640',
-					videoId: id,
-			  playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50 },
-					events: {
-						'onStateChange': onPlayerStateChange,
-						//'onError': onError
-					}});
+				height: '390',
+				width: '640',
+				videoId: id,
+				playerVars: { autoplay:1, enablejsapi:1, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, volume:50 },
+				events: {
+					'onStateChange': onPlayerStateChange,
+					//'onError': onError
+				}});
 		} else {
 			player.loadVideoById(id, 5, "large");
 		}
@@ -87,7 +87,11 @@ function onError(event) {
 }
 
 currentdb.on('child_changed', function(snapshot, prevChildName) {
+	console.log(snapshot.name());
 	//CHANGE RATING OR SKIP VIDEO
+	if(snapshot.name()=="id") {
+		startVideo();
+	}
 	if(snapshot.name()=="rating") {
 		setMeter(snapshot.val());
 	} else if(snapshot.name()=="skip"&&snapshot.val()==1) {
@@ -101,13 +105,12 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 	} else if(snapshot.name()=="fullScreen"&&snapshot.val()==1) {    
 		currentdb.child('fullScreen').set(0);
 		window.fullScreen();
-	} else if(snapshot.name()=="id") {
-		startVideo();
 	}
 });
 
 currentdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDED SONG
+	console.log(snapshot.name());
 	if(snapshot.name()=="id") {
 		startVideo();
 	}
