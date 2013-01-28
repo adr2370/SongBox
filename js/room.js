@@ -98,15 +98,16 @@ currentdb.on('child_changed', function(snapshot, prevChildName) {
 	} else if(snapshot.name()=="pause"&&snapshot.val()==1) {  
 		currentdb.child('pause').set(0);
 		player.pauseVideo();
-	}  else if(snapshot.name()=="fullScreen"&&snapshot.val()==1) {    
+	} else if(snapshot.name()=="fullScreen"&&snapshot.val()==1) {    
 		currentdb.child('fullScreen').set(0);
 		window.fullScreen();
+	} else if(snapshot.name()=="id") {
+		startVideo();
 	}
 });
 
 currentdb.on('child_added', function(snapshot, prevChildName) {
 	//ADDED SONG
-	console.log(snapshot.name());
 	if(snapshot.name()=="id") {
 		startVideo();
 	}
