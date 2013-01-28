@@ -9,7 +9,11 @@ var songs=new Array();
 
 window.setInterval(function(){
 	if(player!=null) {
-		currentdb.child('time').set(player.getCurrentTime());
+		currentdb.child('time').once('value', function(dataSnapshot) {
+			if(dataSnapshot.val()<player.getCurrentTime()) {
+				currentdb.child('time').set(player.getCurrentTime());
+			}
+		});
 	}
 }, 1000);
 
