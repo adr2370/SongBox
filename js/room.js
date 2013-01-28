@@ -38,13 +38,6 @@ function startVideo() {
 		} else {
 			player.loadVideoById(id, 5, "large");
 		}
-		/*if(player!=null) {
-			playerdb.child('volume').once('value', function(dataSnapshot) {
-				player.setVolume(dataSnapshot.val());
-			});
-		} else {
-			console.log("SOMETHING WENT WRONG");
-		}*/
 		$("#visuals canvas").hide();
 		$("#"+id).remove();
 		songdb.child(id).remove();
@@ -76,6 +69,9 @@ function onPlayerStateChange(event) {
 		nextVideo();
 	} else if(event.data == 1) {
 		currentdb.child('play').set(1);
+		playerdb.child('volume').once('value', function(dataSnapshot) {
+			player.setVolume(dataSnapshot.val());
+		});
 	} else if(event.data == 2) {
 		currentdb.child('play').set(2);
 	}
