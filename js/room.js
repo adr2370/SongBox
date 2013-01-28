@@ -8,14 +8,18 @@ var currentdb = firebase.child('current');
 var songs=new Array();
 
 window.setInterval(function(){
-	if(player!=null&&player.getPlayerState()==1) {
-		currentdb.child('time').once('value', function(dataSnapshot) {
-			if(dataSnapshot.val()<player.getCurrentTime()) {
-				currentdb.child('time').set(player.getCurrentTime());
-			} else if(Math.abs(dataSnapshot.val()-player.getCurrentTime())>0.10){
-				player.seekTo(dataSnapshot.val(),true);
-			}
-		});
+	if(player!=null) {
+		if(player.getPlayerState()==1) {
+			currentdb.child('time').once('value', function(dataSnapshot) {
+				if(dataSnapshot.val()<player.getCurrentTime()) {
+					currentdb.child('time').set(player.getCurrentTime());
+				} else if(Math.abs(dataSnapshot.val()-player.getCurrentTime())>0.10){
+					player.seekTo(dataSnapshot.val(),true);
+				}
+			});
+		} else {	
+			currentdb.child('time').set(0);
+		}
 	}
 }, 1000);
 
@@ -126,7 +130,11 @@ function onPlayerStateChange(event) {
 	} else if(event.data == 1) {
 		currentdb.child('play').set(1);
 		currentdb.child('time').once('value', function(dataSnapshot) {
-			player.seekTo(dataSnapshot.val(),true);
+			if(dataSnapshot.val()<player.getCurrentTime()) {
+				currentdb.child('time').set(player.getCurrentTime());
+			} else if(Math.abs(dataSnapshot.val()-player.getCurrentTime())>0.10){
+				player.seekTo(dataSnapshot.val(),true);
+			}
 		});
 		playerdb.child('volume').once('value', function(dataSnapshot) {
 			player.setVolume(dataSnapshot.val());
