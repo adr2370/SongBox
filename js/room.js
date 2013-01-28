@@ -18,7 +18,7 @@ window.setInterval(function(){
 				}
 			});
 		} else {	
-			currentdb.child('time').set(0);
+			//currentdb.child('time').set(0);
 		}
 	}
 }, 1000);
@@ -141,7 +141,7 @@ function onPlayerStateChange(event) {
 		});
 	} else if(event.data == 2) {
 		currentdb.child('play').set(2);
-		currentdb.child('time').set(0);
+		//currentdb.child('time').set(0);
 	}
 }
 
