@@ -1,3 +1,7 @@
+<?php
+$adminNum=$_GET['phonenum'];
+$name=$_GET['name'];
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html lang="en">
 	<head>
