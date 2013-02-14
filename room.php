@@ -1,6 +1,6 @@
 <?php
 $adminNum=$_GET['phonenum'];
-$name=$_GET['name'];
+$name=$_GET['name'];https://songbox.firebaseio.com/
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html lang="en">

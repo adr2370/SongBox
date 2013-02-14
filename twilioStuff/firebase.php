@@ -3,7 +3,7 @@ function patchFirebase($location,$data,$type)
 {
 	set_time_limit(10000);
 	$chlead = curl_init();
-	curl_setopt($chlead, CURLOPT_URL, 'https://adr2370.firebaseio.com/'.$location.'/.json');
+	curl_setopt($chlead, CURLOPT_URL, 'https://songbox.firebaseio.com/'.$location.'/.json');
 	curl_setopt($chlead, CURLOPT_USERAGENT, 'SugarConnector/1.4');
 	curl_setopt($chlead, CURLOPT_HTTPHEADER, array(
 	    'Content-Type: application/json'

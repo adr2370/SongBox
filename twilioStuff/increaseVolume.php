@@ -1,7 +1,7 @@
 <?php
 require_once 'firebase.php';
 $number=$_GET['val'];
-$oldVolume=file_get_contents("https://adr2370.firebaseio.com/playerdb/volume/.json");
+$oldVolume=file_get_contents("https://songbox.firebaseio.com/playerdb/volume/.json");
 $updateVal = 50;
 if($number > 0)
 {
