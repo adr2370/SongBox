@@ -17,7 +17,7 @@
 	$counter = 1;	
 	//confirm user is admin
 	$number = substr($number, 1);
-	$room=file_get_contents("https://songbox.firebaseio.com/numbers/".$number."/.json");
+	$room=substr(file_get_contents("https://songbox.firebaseio.com/numbers/".$number."/.json"),1,-1);
 	if($number == $room)
 	{
 		$isAdmin = true;
