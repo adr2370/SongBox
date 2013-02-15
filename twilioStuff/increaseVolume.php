@@ -12,5 +12,5 @@ else
 {
 	$updateVal = max(0,$number+$oldVolume);
 }
-patchFirebase($room.'/playerdb/volume',$updateVal,"PUT");
+patchFirebase('rooms/'.$room.'/playerdb/volume',$updateVal,"PUT");
 ?>
