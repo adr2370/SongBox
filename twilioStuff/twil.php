@@ -30,7 +30,7 @@
 	{
 		//strip out important stuff from string
 		$room = substr($body, 5);
-		if(file_get_contents("https://songbox.firebaseio.com/numbers/".$number."/.json")==null) {
+		if(file_get_contents("https://songbox.firebaseio.com/numbers/".$number."/.json")=="null") {
 			$sms = $client->account->sms_messages->create("949-391-4022",$number, "This room does not exist");
 		} else {
 			file_get_contents($url."joinRoom.php?room=".$room."&number=".urlencode($number));
