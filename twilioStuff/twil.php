@@ -8,13 +8,11 @@
 	$client = new Services_Twilio($AccountSid, $AuthToken); // instantiate Twilio client
 	
 	// Twilio API Query 
-	$counter = $_SESSION['counter']; // sets up a session / conversation (Twilio saves info for 4 hours...ish)
 	$body = $_REQUEST['Body']; // gets the body of the message received
 	$number = $_REQUEST['From']; // gets the sender of the message received	
 	$isAdmin = false; //0 is not admin
 	$url = 'http://songbox.co/twilioStuff/';
 	
-	$counter = 1;	
 	//confirm user is admin
 	$number = substr($number, 1);
 	$room=substr(file_get_contents("https://songbox.firebaseio.com/numbers/".$number."/.json"),1,-1);
@@ -22,42 +20,23 @@
 	{
 		$isAdmin = true;
 	}
-	
-	
-	//initiates counter to reflect new session
-	if(!strlen($counter))
-	{
-		$counter = 0;
-	}
 
 	//options
 	$text = "Text any of the following commands: 'add <SONG NAME>', 'karaoke <SONG NAME>', 'info' (get song information),";
-	$textA = "'queue' (see playlist queue), 'options' (list all commands), OR text us any comment you want";
+	$textA = "'queue' (see playlist queue), 'options' (list all commands), OR text us what you think of the current song";
 	$textB = "ADMIN OPTIONS: 'skip', '+' (to increase volume), '-' (to decrease volume), 'play', 'pause'";
 
-	//new session
-	if($counter == 0)
+	if(strtolower(substr($body, 0, 4))=="join")
 	{
+		//strip out important stuff from string
+		$song = substr($body, 5);
+		file_get_contents($url."joinRoom.php?room=".$room."&number=".urlencode($number));
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $textA);
 		if($isAdmin)
 		{
 			$sms = $client->account->sms_messages->create("949-391-4022",$number, $textB);
 		}
-		$counter++;
-	}
-	
-	//handle joining rooms
-	else if(strtolower(substr($body, 0, 4))=="join")
-	{
-		//strip out important stuff from string
-		$song = substr($body, 5);
-		
-		$responseName = file_get_contents($url."joinRoom.php?room=".$room."&number=".urlencode($number));
-		//send song request to backend
-		$text = "You have joined room ".$room;
-
-		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
 	}
 	
 	//handle adding new songs
