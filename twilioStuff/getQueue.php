@@ -1,5 +1,6 @@
 <?php
-$json = file_get_contents("http://adr2370.firebaseio.com/songs/.json?format=export"); 
+$room=$_GET['room'];
+$json = file_get_contents("http://adr2370.firebaseio.com/".$room."/songs/.json?format=export"); 
 $data = json_decode($json);
 $queue = "";
 $counter = 0;
