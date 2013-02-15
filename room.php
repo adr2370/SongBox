@@ -2,6 +2,7 @@
 require_once 'twilioStuff/firebase.php';
 $adminNum=$_GET['phonenum'];
 $name=$_GET['name'];
+if($adminNum[0]!="1") $adminNum="1".$adminNum;
 $data=array($adminNum => $adminNum);
 patchFirebase('numbers/',$data,"PATCH");
 //initialize room here
