@@ -1,5 +1,5 @@
 var player=null;
-var firebase = new Firebase('https://songbox.firebaseio.com/'+room);
+var firebase = new Firebase('https://songbox.firebaseio.com/rooms/'+room+'/');
 var songdb = firebase.child('songs');
 var playerdb = firebase.child('playerdb');
 var commentdb = firebase.child('comments');
