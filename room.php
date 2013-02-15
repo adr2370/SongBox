@@ -5,6 +5,10 @@ $name=$_GET['name'];
 $data=array($adminNum => $adminNum);
 patchFirebase('',$data,"PATCH");
 //initialize room here
+$data=array('highestPriority' => '1');
+patchFirebase('rooms/'.$adminNum,$data,"PATCH");
+$data=array('volume' => '60');
+patchFirebase('rooms/'.$adminNum.'/playerdb',$data,"PATCH");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html lang="en">
