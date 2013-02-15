@@ -29,14 +29,23 @@
 	if(strtolower(substr($body, 0, 4))=="join")
 	{
 		//strip out important stuff from string
-		$song = substr($body, 5);
-		file_get_contents($url."joinRoom.php?room=".$room."&number=".urlencode($number));
-		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
-		$sms = $client->account->sms_messages->create("949-391-4022",$number, $textA);
-		if($isAdmin)
-		{
-			$sms = $client->account->sms_messages->create("949-391-4022",$number, $textB);
+		$room = substr($body, 5);
+		if(file_get_contents("https://songbox.firebaseio.com/numbers/".$number."/.json")==null) {
+			$sms = $client->account->sms_messages->create("949-391-4022",$number, "This room does not exist");
+		} else {
+			file_get_contents($url."joinRoom.php?room=".$room."&number=".urlencode($number));
+			$sms = $client->account->sms_messages->create("949-391-4022",$number, "Joined room ".$room);
+			$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
+			$sms = $client->account->sms_messages->create("949-391-4022",$number, $textA);
+			if($isAdmin)
+			{
+				$sms = $client->account->sms_messages->create("949-391-4022",$number, $textB);
+			}
 		}
+	}
+
+	else if($room=="ul") {
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, "You must first join a room, text 'join <ROOM NUMBER>' to join one");
 	}
 	
 	//handle adding new songs
