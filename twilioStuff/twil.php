@@ -16,8 +16,9 @@
 	
 	$counter = 1;	
 	//confirm user is admin
-	$number = substr($number, 1);	
-	if($number == "17145857755" || $number == "16572060254" || $number == "19494229778")
+	$number = substr($number, 1);
+	$room=file_get_contents("https://songbox.firebaseio.com/numbers/".$number."/.json");
+	if($number == $room)
 	{
 		$isAdmin = true;
 	}
@@ -52,7 +53,7 @@
 		//strip out important stuff from string
 		$song = substr($body, 4);
 		
-		$responseName = file_get_contents($url."addSong.php?song=".urlencode($song)."&number=".urlencode($number)."&type=".urlencode("music video"));
+		$responseName = file_get_contents($url."addSong.php?room=".$room."&song=".urlencode($song)."&number=".urlencode($number)."&type=".urlencode("music video"));
 		//send song request to backend
 		$text = $responseName . " has been added to the queue!";	
 
@@ -65,7 +66,7 @@
 		//strip out important stuff from string
 		$song = substr($body, 8);
 		
-		$responseName = file_get_contents($url."addSong.php?song=".urlencode($song)."%20lyrics&number=".urlencode($number)."&type=".urlencode("karaoke"));
+		$responseName = file_get_contents($url."addSong.php?room=".$room."&song=".urlencode($song)."%20lyrics&number=".urlencode($number)."&type=".urlencode("karaoke"));
 		//send song request to backend
 		$text = $responseName . " has been added to the queue!";	
 
@@ -75,14 +76,14 @@
 	//get info
 	else if(strtolower(substr($body, 0, 4))=="info")
 	{
-		$text = file_get_contents($url."getInfo.php");	
+		$text = file_get_contents($url."getInfo.php?room=".$room);	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
 	}
 	
 	//get queue
 	else if(strtolower(substr($body, 0, 5))=="queue")
 	{
-		$text = file_get_contents($url."getQueue.php");	
+		$text = file_get_contents($url."getQueue.php?room=".$room);	
 
 		$convert = explode("<br>", $text); //create array separate by new line
 
@@ -110,7 +111,7 @@
 	else if(strtolower(substr($body, 0, 4))=="skip" && $isAdmin)
 	{		
 		$text = "the current song was skipped";	
-		file_get_contents($url."skipSong.php");	
+		file_get_contents($url."skipSong.php?room=".$room);	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
 	
@@ -118,7 +119,7 @@
 	else if(strtolower(substr($body, 0, 1))=="+" && $isAdmin)
 	{
 		$text = "volume was increased";
-		file_get_contents($url."increaseVolume.php?val=20");
+		file_get_contents($url."increaseVolume.php?room=".$room."&val=20");
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
 	
@@ -126,7 +127,7 @@
 	else if(strtolower(substr($body, 0, 1))=="-" && $isAdmin)
 	{
 		$text = "volume was decreased";	
-		file_get_contents($url."increaseVolume.php?val=-20");	
+		file_get_contents($url."increaseVolume.php?room=".$room."&val=-20");	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
 	
@@ -134,7 +135,7 @@
 	else if(strtolower(substr($body, 0, 4))=="play" && $isAdmin)
 	{		
 		$text = "playing";	
-		file_get_contents($url."playPause.php?which=play");	
+		file_get_contents($url."playPause.php?room=".$room."&which=play");	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
 
@@ -142,14 +143,14 @@
 	else if(strtolower(substr($body, 0, 5))=="pause" && $isAdmin)
 	{
 		$text = "paused";
-		file_get_contents($url."playPause.php?which=pause");	
+		file_get_contents($url."playPause.php?room=".$room."&which=pause");	
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);
 	}
 
 	//other comment
 	else
 	{		
-		$sentiment = file_get_contents($url."getSentiment.php?text=".urlencode($body));
+		$sentiment = file_get_contents($url."getSentiment.php?room=".$room."&text=".urlencode($body));
 		$text = "Your comment was " . $sentiment;
 		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);		
 	}
