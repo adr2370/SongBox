@@ -1,15 +1,15 @@
 <?php
 require_once 'twilioStuff/firebase.php';
-$adminNum=$_GET['phonenum'];
+$room=$_GET['phonenum'];
 $name=$_GET['name'];
-if($adminNum[0]!="1") $adminNum="1".$adminNum;
-$data=array($adminNum => $adminNum);
+if($room[0]!="1") $room="1".$room;
+$data=array($room => $room);
 patchFirebase('numbers/',$data,"PATCH");
 //initialize room here
 $data=array('highestPriority' => '1');
-patchFirebase('rooms/'.$adminNum,$data,"PATCH");
+patchFirebase('rooms/'.$room,$data,"PATCH");
 $data=array('volume' => '60');
-patchFirebase('rooms/'.$adminNum.'/playerdb',$data,"PATCH");
+patchFirebase('rooms/'.$room.'/playerdb',$data,"PATCH");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html lang="en">
@@ -74,6 +74,9 @@ patchFirebase('rooms/'.$adminNum.'/playerdb',$data,"PATCH");
 		</div>
 		<script type="text/javascript" src="https://cdn.firebase.com/v0/firebase.js"></script>
 		<script src="http://www.youtube.com/player_api" type="text/javascript"></script>
+		<script type="text/javascript">
+			var room=<?php echo $room; ?>;
+		</script>
 		<script src="js/room.js" type="text/javascript"></script>
 
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
