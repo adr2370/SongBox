@@ -27,7 +27,7 @@ patchFirebase('rooms/'.$room.'/playerdb',$data,"PATCH");
 	</head>
 	<body>
 		<div class="container" style="background-color:#000000;width:100%;min-height:60px;font-size:55px;padding-top:30px;color:#FFFFFF;">
-			Text "Options" to (949)-391-4022 to start.
+			Text "Join <?php echo $room; ?>" to (949)-391-4022 to start.
 		</div>
 		<p>
 			<br>

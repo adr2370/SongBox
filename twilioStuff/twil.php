@@ -47,6 +47,19 @@
 		$counter++;
 	}
 	
+	//handle joining rooms
+	else if(strtolower(substr($body, 0, 4))=="join")
+	{
+		//strip out important stuff from string
+		$song = substr($body, 5);
+		
+		$responseName = file_get_contents($url."joinRoom.php?room=".$room."&number=".urlencode($number));
+		//send song request to backend
+		$text = "You have joined room ".$room;
+
+		$sms = $client->account->sms_messages->create("949-391-4022",$number, $text);	
+	}
+	
 	//handle adding new songs
 	else if(strtolower(substr($body, 0, 3))=="add")
 	{
